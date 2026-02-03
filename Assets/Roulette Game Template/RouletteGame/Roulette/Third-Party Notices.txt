@@ -1,0 +1,9 @@
+This asset is governed by the Asset Store EULA; however, the following components are governed by the licenses indicated below:
+
+A. DOTween (HOTween v2) for Unity
+MIT/X11
+license and copyright/accreditation details—determined by relevant license
+Notices & Third-Party Rights. This License, including the copyright notice associated with the Software, 
+must be provided in all substantial portions of the Software and derivative works thereof (or, if that is impracticable, 
+in any other location where such notices are customarily placed). Further, if the Software is accompanied by a Unity “third-party notices” or similar file, 
+you acknowledge and agree that software identified in that file is governed by those separate license terms.
