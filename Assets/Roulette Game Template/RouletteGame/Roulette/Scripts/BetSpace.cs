@@ -144,8 +144,8 @@ public class BetSpace : MonoBehaviour {
             {
                 won = true;
 
-                if (mesh && betType == BetType.Straight)
-                    mesh.enabled = true;
+                //if (mesh && betType == BetType.Straight)
+                //    mesh.enabled = true;
                 break;
             }
         }

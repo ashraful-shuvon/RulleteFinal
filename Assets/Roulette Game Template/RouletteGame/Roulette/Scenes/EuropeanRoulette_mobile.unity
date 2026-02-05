@@ -5412,6 +5412,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 8861057594416637791, guid: eb50ca4728f7a7f45a671b2b926bbc98,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8861057594417121432, guid: eb50ca4728f7a7f45a671b2b926bbc98,
         type: 3}
       propertyPath: m_fontAsset
@@ -7143,6 +7148,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8861057595591940988, guid: eb50ca4728f7a7f45a671b2b926bbc98,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8861057595628592784, guid: eb50ca4728f7a7f45a671b2b926bbc98,
         type: 3}
@@ -10975,6 +10985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4c185a00b7479741ba8e660171eb37f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  betSpaces: []
   winSequience: {fileID: 2002226414}
 --- !u!1 &1742225889
 GameObject:
