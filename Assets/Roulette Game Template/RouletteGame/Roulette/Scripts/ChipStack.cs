@@ -93,7 +93,7 @@ public class ChipStack : MonoBehaviour {
             chips.Add(newChip);
         }
     }
-
+    /*
     public float Win(int multiplier)
     {
         float winAmount = value * multiplier;
@@ -105,6 +105,19 @@ public class ChipStack : MonoBehaviour {
         }
 
         return winAmount;
+    }
+    */
+
+    public float Win(int multiplier)
+    {
+        float profit = value * multiplier;  // Bet × multiplier = profit
+        SetValue(profit);  // Show the winnings
+
+        if (profit > 0)
+        {
+            CollectChips();
+        }
+        return profit;
     }
 
     public void CollectChips()

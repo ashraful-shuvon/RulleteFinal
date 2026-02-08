@@ -132,6 +132,7 @@ public class BetSpace : MonoBehaviour {
         SceneRoulette.UpdateLocalPlayerText();
     }
 
+    /*
     public float ResolveBet(int result)
     {
         int multiplier = numLenght / winningNumbers.Length;
@@ -162,7 +163,76 @@ public class BetSpace : MonoBehaviour {
 
         return winAmount;
     }
+    */
 
+    public float ResolveBet(int result)
+    {
+        bool won = false;
+
+        foreach (int num in winningNumbers)
+        {
+            if (num == result)
+            {
+                won = true;
+                break;
+            }
+        }
+
+        float winAmount = 0;
+
+        if (won)
+        {
+            // Use the new function instead of the old formula
+            int multiplier = GetPayoutMultiplier(betType, winningNumbers.Length);
+
+            Debug.Log("Bet Type: " + betType + " | Multiplier: " + multiplier + " | Bet Value: " + stack.GetValue());
+
+            winAmount = stack.Win(multiplier);
+        }
+        else
+        {
+            stack.Clear();
+        }
+
+        return winAmount;
+    }
+
+    // Add this new function
+    private int GetPayoutMultiplier(BetType type, int numCount)
+    {
+        switch (type)
+        {
+            case BetType.Straight:
+                return 35;
+
+            case BetType.Split:
+                return 17;
+
+            case BetType.Street:
+                return 11;
+
+            case BetType.Corner:
+                return 8;
+
+            case BetType.DoubleStreet:
+                return 5;
+
+            case BetType.Dozen:
+            case BetType.Row:
+                return 2;           // ← 2:1 for Dozen and Column
+
+            case BetType.Red:
+            case BetType.Black:
+            case BetType.Even:
+            case BetType.Odd:
+            case BetType.Low:
+            case BetType.High:
+                return 1;
+
+            default:
+                return numLenght / numCount;
+        }
+    }
     public void Rebet()
     {
         if (lastBet == 0)
