@@ -38,6 +38,12 @@ public class SceneRoulette : MonoBehaviour
     public static bool GameStarted = false;
     public static bool MenuOn = false;
 
+    // Warning messages
+    [Space]
+    [Header("Warning Messages")]
+    public GameObject warningPanel;         // Add this
+    public TMP_Text warningText;            // Add this
+    public Button warningCloseButton;       // Add this
 
     void Awake()
     {
@@ -46,7 +52,7 @@ public class SceneRoulette : MonoBehaviour
 
     private void Start()
     {
-        BalanceManager.SetBalance(1000);
+        BalanceManager.SetBalance(3000);
     }
 
     public void MessageQuitResult(int value)
@@ -129,6 +135,21 @@ public class SceneRoulette : MonoBehaviour
         _Instance.textBalance.text = BalanceManager.Balance.ToString("F2");
     }
 
-    
+    // Warning message methods
+    public static void ShowWarning(string message)
+    {
+        if (_Instance != null)
+        {
+            _Instance.warningText.text = message;
+            _Instance.warningPanel.SetActive(true);
+            AudioManager.SoundPlay(4); // Error sound
+        }
+    }
+
+    public void CloseWarning()
+    {
+        warningPanel.SetActive(false);
+    }
+
 }
 

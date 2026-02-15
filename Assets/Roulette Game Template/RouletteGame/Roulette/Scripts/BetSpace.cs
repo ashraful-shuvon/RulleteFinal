@@ -99,8 +99,21 @@ public class BetSpace : MonoBehaviour {
 
     public void ApplyBet(float selectedValue)
     {
+        //if (!LimitBetPlate.AllowLimit(selectedValue))
+        //    return;
+
+        // Check if the selected bet exceeds the limit before applying it
         if (!LimitBetPlate.AllowLimit(selectedValue))
+        {
+            SceneRoulette.ShowWarning("Bet limit exceeded!");
             return;
+        }
+
+        if (BalanceManager.Balance - selectedValue < 0)
+        {
+            SceneRoulette.ShowWarning("Insufficient balance! $" + BalanceManager.Balance.ToString("F2"));
+            return;
+        }
 
         if (BetsEnabled && selectedValue > 0 && BalanceManager.Balance - selectedValue >= 0)
         {
@@ -219,7 +232,7 @@ public class BetSpace : MonoBehaviour {
 
             case BetType.Dozen:
             case BetType.Row:
-                return 2;           // ← 2:1 for Dozen and Column
+                return 3;           // ← 2:1 for Dozen and Column
 
             case BetType.Red:
             case BetType.Black:
@@ -227,7 +240,7 @@ public class BetSpace : MonoBehaviour {
             case BetType.Odd:
             case BetType.Low:
             case BetType.High:
-                return 1;
+                return 2;
 
             default:
                 return numLenght / numCount;
