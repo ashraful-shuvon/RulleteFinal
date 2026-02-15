@@ -44,6 +44,7 @@ public class SceneRoulette : MonoBehaviour
     public GameObject warningPanel;         // Add this
     public TMP_Text warningText;            // Add this
     public Button warningCloseButton;       // Add this
+    public Button addBalanceButton;
 
     void Awake()
     {
@@ -136,6 +137,8 @@ public class SceneRoulette : MonoBehaviour
     }
 
     // Warning message methods
+
+    /*
     public static void ShowWarning(string message)
     {
         if (_Instance != null)
@@ -143,6 +146,85 @@ public class SceneRoulette : MonoBehaviour
             _Instance.warningText.text = message;
             _Instance.warningPanel.SetActive(true);
             AudioManager.SoundPlay(4); // Error sound
+        }
+    }
+    */
+
+    // ADD THESE NEW FUNCTIONS - Don't change anything else
+
+    // Overloaded version with button control
+    public static void ShowWarning(string message, bool showAddBalanceButton)
+    {
+        if (_Instance != null)
+        {
+            _Instance.warningText.text = message;
+            _Instance.warningPanel.SetActive(true);
+
+            // Show/hide the add balance button
+            if (_Instance.addBalanceButton != null)
+            {
+                _Instance.addBalanceButton.gameObject.SetActive(showAddBalanceButton);
+            }
+
+            AudioManager.SoundPlay(4);
+        }
+    }
+
+    /*
+    public void AddBalance()
+    {
+        BalanceManager.ChangeBalance(1000); // Add $1000
+        AudioManager.SoundPlay(3); // Success sound
+        CloseWarning();
+
+        // Optional: Show confirmation
+        if (resultText != null)
+        {
+            resultText.text = "+$1000 Added!";
+            resultText.color = Color.green;
+            StartCoroutine(ClearResultTextAfterDelay(2f));
+        }
+    }
+
+    private IEnumerator ClearResultTextAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (resultText != null)
+        {
+            resultText.text = "";
+            resultText.color = Color.white;
+        }
+    }
+    */
+
+    public void AddBalance()
+    {
+        BalanceManager.ChangeBalance(1000);
+        AudioManager.SoundPlay(3);
+
+        // Show success message in warning panel
+        warningText.text = "+$1000 Added!";
+        warningText.color = Color.green;
+
+        // Hide the add balance button
+        if (addBalanceButton != null)
+        {
+            addBalanceButton.gameObject.SetActive(false);
+        }
+
+        // Close after a short delay
+        StartCoroutine(CloseWarningAfterDelay(1.5f));
+    }
+
+    private IEnumerator CloseWarningAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        CloseWarning();
+
+        // Reset color back to white
+        if (warningText != null)
+        {
+            warningText.color = Color.white;
         }
     }
 

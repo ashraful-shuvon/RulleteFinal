@@ -105,13 +105,13 @@ public class BetSpace : MonoBehaviour {
         // Check if the selected bet exceeds the limit before applying it
         if (!LimitBetPlate.AllowLimit(selectedValue))
         {
-            SceneRoulette.ShowWarning("Bet limit exceeded!");
+            SceneRoulette.ShowWarning("Bet limit exceeded!", false);
             return;
         }
 
         if (BalanceManager.Balance - selectedValue < 0)
         {
-            SceneRoulette.ShowWarning("Insufficient balance! $" + BalanceManager.Balance.ToString("F2"));
+            SceneRoulette.ShowWarning("Insufficient balance! $" + BalanceManager.Balance.ToString("F2"), true);
             return;
         }
 
