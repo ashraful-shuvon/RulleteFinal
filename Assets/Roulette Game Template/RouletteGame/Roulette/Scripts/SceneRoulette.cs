@@ -45,6 +45,7 @@ public class SceneRoulette : MonoBehaviour
     public TMP_Text warningText;            // Add this
     public Button warningCloseButton;       // Add this
     public Button addBalanceButton;
+    public Button buyChipsButton;
 
     void Awake()
     {
@@ -54,6 +55,12 @@ public class SceneRoulette : MonoBehaviour
     private void Start()
     {
         BalanceManager.SetBalance(3000);
+
+        // Setup buy chips button in warning panel
+        if (buyChipsButton != null)
+        {
+            buyChipsButton.onClick.AddListener(OpenShopFromWarning);
+        }
     }
 
     public void MessageQuitResult(int value)
@@ -136,6 +143,119 @@ public class SceneRoulette : MonoBehaviour
         _Instance.textBalance.text = BalanceManager.Balance.ToString("F2");
     }
 
+    
+    
+    // IAP Shop method called from warning panel - opens shop and closes warning panel
+
+    // Existing ShowWarning with both buttons
+    public static void ShowWarning(string message, bool showBalanceButtons)
+    {
+        if (_Instance != null)
+        {
+            _Instance.warningText.text = message;
+            _Instance.warningPanel.SetActive(true);
+
+            // Show/hide add balance button
+            if (_Instance.addBalanceButton != null)
+            {
+                _Instance.addBalanceButton.gameObject.SetActive(showBalanceButtons);
+            }
+
+            // Show/hide buy chips button
+            if (_Instance.buyChipsButton != null)
+            {
+                _Instance.buyChipsButton.gameObject.SetActive(showBalanceButtons);
+            }
+
+            AudioManager.SoundPlay(4);
+        }
+    }
+
+    // Keep existing AddBalance function
+    public void AddBalance()
+    {
+        BalanceManager.ChangeBalance(1000);
+        AudioManager.SoundPlay(3);
+
+        warningText.text = "+$1000 Added!";
+        warningText.color = Color.green;
+
+        if (addBalanceButton != null)
+        {
+            addBalanceButton.gameObject.SetActive(false);
+        }
+
+        if (buyChipsButton != null)
+        {
+            buyChipsButton.gameObject.SetActive(false);
+        }
+
+        StartCoroutine(CloseWarningAfterDelay(1.5f));
+    }
+
+    private IEnumerator CloseWarningAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        CloseWarning();
+
+        if (warningText != null)
+        {
+            warningText.color = Color.white;
+        }
+    }
+
+    public void CloseWarning()
+    {
+        if (warningPanel != null)
+        {
+            warningPanel.SetActive(false);
+        }
+    }
+
+    // NEW: Open shop from warning panel (closes warning first)
+    public void OpenShopFromWarning()
+    {
+        // Close warning panel
+        CloseWarning();
+
+        // Open IAP shop
+        if (IAPManager.Instance != null)
+        {
+            IAPManager.Instance.OpenIAPPanelFromWarning();
+        }
+    }
+
+    // NEW: Open shop from main UI
+    public void OpenShop()
+    {
+        if (IAPManager.Instance != null)
+        {
+            IAPManager.Instance.OpenIAPPanel();
+        }
+    }
+
+    // NEW: Show purchase success message
+    public void ShowPurchaseSuccess(float amount)
+    {
+        if (warningPanel != null && warningText != null)
+        {
+            warningText.text = $"Purchase Successful!\n+${amount:F0} Chips Added!";
+            warningText.color = Color.green;
+            warningPanel.SetActive(true);
+
+            // Hide buttons
+            if (addBalanceButton != null)
+                addBalanceButton.gameObject.SetActive(false);
+            if (buyChipsButton != null)
+                buyChipsButton.gameObject.SetActive(false);
+
+            // Auto close after 2 seconds
+            StartCoroutine(CloseWarningAfterDelay(2f));
+        }
+    }
+
+
+    /*--------------------------------------------------------------------------------------------*/
     // Warning message methods
 
     /*
@@ -153,6 +273,8 @@ public class SceneRoulette : MonoBehaviour
     // ADD THESE NEW FUNCTIONS - Don't change anything else
 
     // Overloaded version with button control
+
+    /* Updated on 2026-02-18: Added button control to ShowWarning method and implemented AddBalance method with confirmation message.
     public static void ShowWarning(string message, bool showAddBalanceButton)
     {
         if (_Instance != null)
@@ -170,7 +292,7 @@ public class SceneRoulette : MonoBehaviour
         }
     }
 
-    /*
+    
     public void AddBalance()
     {
         BalanceManager.ChangeBalance(1000); // Add $1000
@@ -195,7 +317,7 @@ public class SceneRoulette : MonoBehaviour
             resultText.color = Color.white;
         }
     }
-    */
+    
 
     public void AddBalance()
     {
@@ -232,6 +354,8 @@ public class SceneRoulette : MonoBehaviour
     {
         warningPanel.SetActive(false);
     }
+
+    */
 
 }
 
