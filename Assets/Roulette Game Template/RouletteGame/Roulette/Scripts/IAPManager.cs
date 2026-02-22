@@ -116,6 +116,9 @@ public class IAPPackage
     public float chipAmount;
     public float price;
     public string productID;
-    public Sprite icon;
-    public Color buttonColor = Color.white;
+
+    [Header("Visuals")]
+    public Sprite backgroundSprite;  // NEW: Custom background image
+    public Sprite icon;              // Optional icon
+    public Color buttonColor = Color.white;  // Fallback if no sprite
 }

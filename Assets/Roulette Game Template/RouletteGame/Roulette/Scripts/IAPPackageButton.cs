@@ -50,36 +50,32 @@ public class IAPPackageButton : MonoBehaviour
             iconImage.gameObject.SetActive(false);
         }
 
-        // Set background color
+        // Set background sprite or color
         if (backgroundImage != null)
-            backgroundImage.color = pkg.buttonColor;
+        {
+            if (pkg.backgroundSprite != null)
+            {
+                // Use custom sprite background
+                backgroundImage.sprite = pkg.backgroundSprite;
+                backgroundImage.color = Color.white; // Full opacity to show sprite
+                backgroundImage.type = Image.Type.Sliced; // For proper scaling
+            }
+            else
+            {
+                // Fallback to solid color if no sprite provided
+                backgroundImage.sprite = null;
+                backgroundImage.color = pkg.buttonColor;
+                backgroundImage.type = Image.Type.Simple;
+            }
+        }
     }
 
     void OnPurchaseClick()
     {
-        // For testing: instant purchase (no real money involved)
         if (IAPManager.Instance != null)
         {
             Debug.Log($"Purchasing: {package.packageName} - ${package.chipAmount} chips for ${package.price}");
             IAPManager.Instance.PurchasePackage(package);
         }
-
-        // TODO: For real IAP integration, replace above with:
-        // IAPService.PurchaseProduct(package.productID, OnPurchaseSuccess, OnPurchaseFailed);
-    }
-
-    // For future real IAP integration
-    void OnPurchaseSuccess(string productID)
-    {
-        if (IAPManager.Instance != null)
-        {
-            IAPManager.Instance.PurchasePackage(package);
-        }
-    }
-
-    void OnPurchaseFailed(string error)
-    {
-        Debug.LogError($"Purchase failed: {error}");
-        SceneRoulette.ShowWarning($"Purchase Failed!\n{error}", false);
     }
 }
