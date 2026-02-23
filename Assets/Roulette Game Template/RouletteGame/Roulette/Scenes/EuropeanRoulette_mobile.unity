@@ -1665,11 +1665,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 367413985}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -22}
-  m_SizeDelta: {x: 200, y: 50}
-  m_Pivot: {x: 0.5, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 300, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &297960980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2619,7 +2619,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -25}
-  m_SizeDelta: {x: 250, y: 100}
+  m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &367413986
 MonoBehaviour:
@@ -2634,14 +2634,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.16470589, g: 0.48235294, b: 0.29803923, a: 1}
+  m_Color: {r: 0.48235294, g: 0.1647059, b: 0.20032084, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 01a865e295498474ca30e945fd56469f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3062,7 +3062,7 @@ RectTransform:
   m_Father: {fileID: 1349116139}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3410,8 +3410,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8455605}
-  - {fileID: 1672271872}
   - {fileID: 381414936}
+  - {fileID: 1672271872}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -10778,32 +10778,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   packages:
-  - packageName: Starter Pack
-    chipAmount: 5000
+  - packageName: 
+    chipAmount: 25000
     price: 0.99
     productID: com.yourgame.chips_5000
-    backgroundSprite: {fileID: 21300000, guid: 24ed958ec4d72914d837d702fca7b4f1, type: 3}
+    backgroundSprite: {fileID: 21300000, guid: fe9b5a0aaaff7114abb2524a1c410f0a, type: 3}
     icon: {fileID: 21300000, guid: f38fdb171a1a53a40857d6b2a033582a, type: 3}
     buttonColor: {r: 0.35850394, g: 0, b: 0.5943396, a: 0}
-  - packageName: Standard Pack
-    chipAmount: 15000
+  - packageName: 
+    chipAmount: 50000
     price: 2.99
     productID: com.yourgame.chips_15000
-    backgroundSprite: {fileID: 21300000, guid: 01a865e295498474ca30e945fd56469f, type: 3}
+    backgroundSprite: {fileID: 21300000, guid: 89c260e5c264077488e79742d728f169, type: 3}
     icon: {fileID: 0}
     buttonColor: {r: 0, g: 0, b: 0, a: 0}
-  - packageName: Premium Pack
-    chipAmount: 50000
+  - packageName: 
+    chipAmount: 500000
     price: 9.99
     productID: com.yourgame.chips_50000
-    backgroundSprite: {fileID: 0}
+    backgroundSprite: {fileID: 21300000, guid: e64317ce0c1f37b4db00c302c19ea801, type: 3}
     icon: {fileID: 0}
     buttonColor: {r: 1, g: 0.84313726, b: 0, a: 0}
-  - packageName: 'VIP Pack '
-    chipAmount: 100000
+  - packageName: 
+    chipAmount: 1000000
     price: 19.99
     productID: ' com.yourgame.chips_100000'
-    backgroundSprite: {fileID: 0}
+    backgroundSprite: {fileID: 21300000, guid: 1bd1add14602a9f419afab60dd00620b, type: 3}
     icon: {fileID: 0}
     buttonColor: {r: 0.85490197, g: 0.4392157, b: 0.8392157, a: 0}
   iapPanel: {fileID: 1866842256}
@@ -13874,7 +13874,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 40}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1695946533
 MonoBehaviour:
@@ -13949,7 +13949,7 @@ RectTransform:
   m_Father: {fileID: 1339072217}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -14208,14 +14208,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 21e4120b07c9a7942874b0850dd0854d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -14638,7 +14638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1866842257
 RectTransform:
   m_ObjectHideFlags: 0
@@ -14674,15 +14674,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 27b5b1d0dd81db64a8b9134928694bae, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
