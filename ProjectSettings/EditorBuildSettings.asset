@@ -6,8 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Roulette Game Template/RouletteGame/Roulette/Scenes/WelcomeScene.unity
-    guid: 8105833d5a8f73a45bf03e6a6c64d320
+    path: Assets/Scenes/SplashScreen.unity
+    guid: 1402fb59b85936341a7857d50350d3cd
+  - enabled: 1
+    path: Assets/Scenes/AuthScreen.unity
+    guid: 5286878214691004695f18fd15f4cf72
   - enabled: 1
     path: Assets/Roulette Game Template/RouletteGame/Roulette/Scenes/EuropeanRoulette_mobile.unity
     guid: b24f0918bb57e5d41bafabfcce6ee895
