@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// Controller for the in-game HUD (timer, phase, players list)
 /// Uses UI Toolkit (UXML/USS)
 /// </summary>
-public class GameHUDController : MonoBehaviour
+public class GameHUDController : MonoBehaviourPunCallbacks
 {
     [Header("UI Toolkit References")]
     [SerializeField] private UIDocument uiDocument;
@@ -157,7 +157,13 @@ public class GameHUDController : MonoBehaviour
         // Initial update
         UpdateBalance(3000, 0);
         UpdatePhase(GamePhase.Waiting, 0);
+        UpdatePlayersList(); // Update the hardcoded 2/4 text
     }
+
+    public override void OnJoinedRoom() => UpdatePlayersList();
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) => UpdatePlayersList();
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer) => UpdatePlayersList();
+    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient) => UpdatePlayersList();
 
     private void SetupButtonCallbacks()
     {
