@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using DG.Tweening;
 
 public class CameraController : MonoBehaviour
@@ -12,6 +12,11 @@ public class CameraController : MonoBehaviour
 
     private void Start()
     {
+        // Adjust default Z position to better fit the board inside the screen
+        Vector3 newPos = transform.position;
+        newPos.z = 0.02f;
+        transform.position = newPos;
+
         originPosition = transform.position;
         originRotation = transform.rotation;
     }

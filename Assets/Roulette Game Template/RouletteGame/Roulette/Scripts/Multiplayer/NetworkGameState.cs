@@ -42,6 +42,8 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
     private const byte SPIN_RESULT_EVENT = 2;
     private const byte PLAYER_BET_EVENT = 3;
     private const byte CLEAR_BETS_EVENT = 4;
+    private const byte PLAYER_CLEAR_BETS_EVENT = 5;
+    private const byte PLAYER_UNDO_BET_EVENT = 6;
     private const byte TIMER_SYNC_EVENT = 5;
 
     private void Awake()
@@ -259,6 +261,23 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
         Debug.Log($"[NetworkGameState] Player {playerId} bet {amount} on space {betSpaceIndex}");
     }
 
+    public void PlayerClearBets()
+    {
+        if (CurrentPhase != GamePhase.Betting) return;
+        int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(PLAYER_CLEAR_BETS_EVENT, playerId, options, SendOptions.SendReliable);
+    }
+
+    public void PlayerUndoBet(int betSpaceIndex, float amount)
+    {
+        if (CurrentPhase != GamePhase.Betting) return;
+        int playerId = PhotonNetwork.LocalPlayer.ActorNumber;
+        object[] betData = new object[] { playerId, betSpaceIndex, amount };
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(PLAYER_UNDO_BET_EVENT, betData, options, SendOptions.SendReliable);
+    }
+
     /// <summary>
     /// Process received bet from another player
     /// </summary>
@@ -361,6 +380,12 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
             case CLEAR_BETS_EVENT:
                 HandleClearBetsEvent();
                 break;
+            case PLAYER_CLEAR_BETS_EVENT:
+                HandlePlayerClearBetsEvent(photonEvent);
+                break;
+            case PLAYER_UNDO_BET_EVENT:
+                HandlePlayerUndoBetEvent(photonEvent);
+                break;
         }
     }
 
@@ -368,6 +393,9 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         object[] data = (object[])photonEvent.CustomData;
         GamePhase phase = (GamePhase)data[0];
+        
+        if (CurrentPhase == phase) return; // Prevent double-triggering from RoomProperties vs RPC packet racing!
+
         float duration = (float)data[1];
         if (data.Length > 2)
         {
@@ -401,6 +429,29 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
     {
         playerBets.Clear();
         Debug.Log("[NetworkGameState] Bets cleared event received");
+    }
+
+    private void HandlePlayerClearBetsEvent(EventData photonEvent)
+    {
+        int playerId = (int)photonEvent.CustomData;
+        if (playerBets.ContainsKey(playerId))
+        {
+            playerBets.Remove(playerId);
+            Debug.Log($"[NetworkGameState] Cleared bets for player {playerId}");
+        }
+    }
+
+    private void HandlePlayerUndoBetEvent(EventData photonEvent)
+    {
+        object[] data = (object[])photonEvent.CustomData;
+        int playerId = (int)data[0];
+        int betSpaceIndex = (int)data[1];
+        float amount = (float)data[2];
+
+        if (playerBets.ContainsKey(playerId))
+        {
+             playerBets[playerId].RemoveBet(betSpaceIndex, amount);
+        }
     }
 
     #endregion
@@ -468,6 +519,16 @@ public class PlayerBetData
             Bets[betSpaceIndex] = amount;
         }
         TotalBet += amount;
+    }
+
+    public void RemoveBet(int betSpaceIndex, float amount)
+    {
+        if (Bets.ContainsKey(betSpaceIndex))
+        {
+            Bets[betSpaceIndex] -= amount;
+            if (Bets[betSpaceIndex] <= 0f) Bets.Remove(betSpaceIndex);
+        }
+        TotalBet -= amount;
     }
 
     public float CalculateWinnings(int result)

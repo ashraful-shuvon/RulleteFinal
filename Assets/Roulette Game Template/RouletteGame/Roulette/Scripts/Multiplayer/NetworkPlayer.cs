@@ -60,6 +60,19 @@ public class NetworkPlayer : MonoBehaviourPun
         {
             nameLabel.text = photonView.Owner.NickName;
         }
+
+        if (photonView.IsMine && NetworkGameState.Instance != null)
+        {
+            NetworkGameState.Instance.OnPhaseChanged += HandlePhaseChanged;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (photonView.IsMine && NetworkGameState.Instance != null)
+        {
+            NetworkGameState.Instance.OnPhaseChanged -= HandlePhaseChanged;
+        }
     }
 
     #region Betting Methods
@@ -143,6 +156,11 @@ public class NetworkPlayer : MonoBehaviourPun
             }
         }
 
+        if (NetworkGameState.Instance != null)
+        {
+            NetworkGameState.Instance.PlayerUndoBet(lastBet.BetSpaceIndex, lastBet.Amount);
+        }
+
         OnBalanceChanged?.Invoke(Balance);
 
         // Update visuals
@@ -180,6 +198,11 @@ public class NetworkPlayer : MonoBehaviourPun
         previousRoundBets.Clear();
         currentRoundBets.Clear();
         betHistory.Clear();
+
+        if (NetworkGameState.Instance != null)
+        {
+            NetworkGameState.Instance.PlayerClearBets();
+        }
 
         OnBalanceChanged?.Invoke(Balance);
 
@@ -276,6 +299,58 @@ public class NetworkPlayer : MonoBehaviourPun
         OnWinReceived?.Invoke(amount);
 
         Debug.Log($"[NetworkPlayer] Received winnings: {amount}. New balance: {Balance}");
+    }
+
+    public float CalculatePotentialWin(int result)
+    {
+        float totalWin = 0;
+        foreach(var kvp in currentRoundBets)
+        {
+            BetSpace space = BetSpaceRegistry.GetBetSpaceByIndex(kvp.Key);
+            if (space != null)
+            {
+                foreach (int winNum in space.winningNumbers)
+                {
+                    if (winNum == result)
+                    {
+                        int multiplier = GetPayoutMultiplier(space.betType);
+                        totalWin += kvp.Value * multiplier + kvp.Value;
+                        break;
+                    }
+                }
+            }
+        }
+        return totalWin;
+    }
+
+    private int GetPayoutMultiplier(BetType betType)
+    {
+        return betType switch
+        {
+            BetType.Straight => 35,
+            BetType.Split => 17,
+            BetType.Street => 11,
+            BetType.Corner => 8,
+            BetType.DoubleStreet => 5,
+            BetType.Row => 2,
+            BetType.Dozen => 2,
+            BetType.Red => 1,
+            BetType.Black => 1,
+            BetType.Even => 1,
+            BetType.Odd => 1,
+            BetType.Low => 1,
+            BetType.High => 1,
+            _ => 0
+        };
+    }
+
+    private void HandlePhaseChanged(GamePhase phase)
+    {
+        if (photonView.IsMine && phase == GamePhase.Payout)
+        {
+            float totalWin = CalculatePotentialWin(NetworkGameState.Instance.LastResult);
+            ReceiveWinnings(totalWin);
+        }
     }
 
     #endregion

@@ -6948,8 +6948,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LobbyPanelController
   uiDocument: {fileID: 1128418222}
-  playerEntryAsset: {fileID: 0}
-  tableEntryAsset: {fileID: 0}
+  playerEntryAsset: {fileID: 9197481963319205126, guid: 65825e88239c94fee9317011be43931c,
+    type: 3}
+  tableEntryAsset: {fileID: 9197481963319205126, guid: d8537f4185df549bbaa8c6a2c0271d6e,
+    type: 3}
 --- !u!114 &1128418222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7140,6 +7142,79 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 61.395, y: 1.789, z: 2}
+--- !u!1 &1595687570
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595687573}
+  - component: {fileID: 1595687572}
+  - component: {fileID: 1595687571}
+  m_Layer: 0
+  m_Name: NetworkGameState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1595687571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595687570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: PhotonUnityNetworking::Photon.Pun.PhotonView
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 1
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &1595687572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595687570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08a51454b1bbe4cfa9079025b693d68a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NetworkGameState
+  bettingPhaseDuration: 15
+  spinningPhaseDuration: 7
+  resultPhaseDuration: 3
+  payoutPhaseDuration: 2
+  europeanWheel: {fileID: 473305588}
+  americanWheel: {fileID: 0}
+--- !u!4 &1595687573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595687570}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1597261538
 GameObject:
   m_ObjectHideFlags: 0
@@ -7574,3 +7649,4 @@ SceneRoots:
   - {fileID: 561928058}
   - {fileID: 1128418223}
   - {fileID: 1241325975}
+  - {fileID: 1595687573}
