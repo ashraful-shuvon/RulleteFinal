@@ -1,0 +1,84 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Style src="GameHUD.uss" />
+    <ui:Style src="../Theme.uss" />
+    <!-- In-Game Multiplayer HUD - Shown during gameplay -->
+    <ui:VisualElement name="GameHUD" class="game-hud">
+        
+        <!-- Top Bar: Phase & Timer -->
+        <ui:VisualElement name="TopBar" class="top-bar">
+            
+            <!-- Phase Indicator -->
+            <ui:VisualElement name="PhaseContainer" class="phase-container">
+                <ui:Label text="PLACE YOUR BETS" name="PhaseLabel" class="phase-label"/>
+                <ui:VisualElement name="PhaseTimerBar" class="phase-timer-bar">
+                    <ui:VisualElement name="TimerFill" class="timer-fill"/>
+                    <ui:Label text="15" name="TimerLabel" class="timer-label"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            
+            <!-- Connection Info -->
+            <ui:VisualElement name="ConnectionInfo" class="connection-info">
+                <ui:Label text="●" name="ConnectionDot" class="connection-dot"/>
+                <ui:Label text="2/4 Players" name="PlayersLabel" class="players-label"/>
+            </ui:VisualElement>
+            
+        </ui:VisualElement>
+        
+        <!-- Right Panel: Players List -->
+        <ui:VisualElement name="RightPanel" class="right-panel">
+            <ui:Label text="PLAYERS" class="panel-title"/>
+            <ui:ListView name="PlayersList" class="players-hud-list"/>
+            <ui:Button text="Invite" name="InviteButton" class="invite-hud-btn"/>
+        </ui:VisualElement>
+        
+        <!-- Bottom Bar: Balance & Betting Actions -->
+        <ui:VisualElement name="BottomBar" class="bottom-bar">
+            
+            <ui:VisualElement name="BottomBarTopRow" class="bottom-bar-top-row">
+                <!-- Balance Section -->
+                <ui:VisualElement name="BalanceSection" class="balance-section">
+                    <ui:Label text="Balance" class="balance-label-small"/>
+                    <ui:Label text="$3,000" name="BalanceText" class="balance-text"/>
+                    <ui:Label text="Current Bet: $0" name="TotalBetText" class="total-bet-text"/>
+                </ui:VisualElement>
+                
+                <!-- Room Code -->
+                <ui:VisualElement name="RoomCodeSection" class="room-code-hud">
+                    <ui:Label text="Room: ABC123" name="RoomCodeLabel" class="room-code-hud-text"/>
+                    <ui:Button text="📋" name="CopyRoomCodeBtn" class="copy-code-btn"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            
+            <!-- Action Buttons -->
+            <ui:VisualElement name="ActionButtons" class="action-buttons">
+                <ui:Button text="Clear" name="ClearButton" class="action-btn clear-btn"/>
+                <ui:Button text="Undo" name="UndoButton" class="action-btn undo-btn"/>
+                <ui:Button text="Rebet" name="RebetButton" class="action-btn rebet-btn"/>
+                <ui:Button text="2x" name="DoubleButton" class="action-btn double-btn"/>
+            </ui:VisualElement>
+            
+        </ui:VisualElement>
+        
+        <!-- Result Popup (Hidden by default) -->
+        <ui:VisualElement name="ResultPopup" class="result-popup" style="display: none;">
+            <ui:VisualElement name="ResultCard" class="result-card">
+                <ui:Label text="17" name="ResultNumber" class="result-number"/>
+                <ui:VisualElement name="ResultColor" class="result-color red"/>
+                <ui:Label text="WIN!" name="ResultWinLabel" class="result-win-label"/>
+                <ui:Label text="+$350" name="WinAmountLabel" class="win-amount-label"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        
+        <!-- Invite Panel (Hidden by default) -->
+        <ui:VisualElement name="InvitePanel" class="invite-panel" style="display: none;">
+            <ui:VisualElement name="InviteCard" class="invite-card">
+                <ui:Label text="INVITE PLAYER" class="invite-title"/>
+                <ui:Label text="Room Code:" class="invite-code-label"/>
+                <ui:Label text="ABC123" name="InviteRoomCode" class="invite-room-code"/>
+                <ui:Button text="Copy Code" name="CopyInviteCodeBtn" class="copy-invite-btn"/>
+                <ui:Button text="Close" name="CloseInviteBtn" class="close-invite-btn"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        
+    </ui:VisualElement>
+</ui:UXML>

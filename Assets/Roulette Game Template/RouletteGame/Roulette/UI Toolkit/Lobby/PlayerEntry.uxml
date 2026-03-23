@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <!-- Player Entry Item for List View -->
+    <ui:VisualElement name="PlayerEntry" class="player-entry">
+        
+        <!-- Player Avatar -->
+        <ui:VisualElement name="AvatarContainer" class="avatar-container">
+            <ui:Image name="AvatarImage" class="avatar-image"/>
+            <ui:VisualElement name="ReadyIndicator" class="ready-indicator"/>
+        </ui:VisualElement>
+        
+        <!-- Player Info -->
+        <ui:VisualElement name="PlayerInfo" class="player-info">
+            <ui:Label text="Player Name" name="PlayerNameLabel" class="player-name"/>
+            <ui:VisualElement name="PlayerStats" class="player-stats">
+                <ui:Label text="$3,000" name="BalanceLabel" class="player-balance"/>
+                <ui:Label text="Bet: $0" name="BetLabel" class="player-bet"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        
+        <!-- Player Status -->
+        <ui:VisualElement name="StatusContainer" class="status-container">
+            <ui:Image name="MasterIcon" class="master-icon" tooltip="Room Host"/>
+            <ui:Button text="Kick" name="KickButton" class="kick-btn" tooltip="Remove player"/>
+        </ui:VisualElement>
+        
+    </ui:VisualElement>
+</ui:UXML>

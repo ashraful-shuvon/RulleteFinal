@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <!-- Player Entry for HUD (Compact Version) -->
+    <ui:VisualElement name="PlayerHUDEntry" class="player-hud-entry">
+        
+        <!-- Avatar -->
+        <ui:VisualElement name="AvatarBox" class="avatar-box">
+            <ui:Image name="PlayerAvatar" class="player-avatar"/>
+            <ui:VisualElement name="MasterCrown" class="master-crown"/>
+        </ui:VisualElement>
+        
+        <!-- Info -->
+        <ui:VisualElement name="InfoBox" class="info-box">
+            <ui:Label text="Player" name="NameLabel" class="hud-name"/>
+            <ui:Label text="$3,000" name="BalanceLabel" class="hud-balance"/>
+        </ui:VisualElement>
+        
+        <!-- Bet Indicator -->
+        <ui:VisualElement name="BetIndicator" class="bet-indicator">
+            <ui:Label text="$50" name="BetLabel" class="hud-bet"/>
+        </ui:VisualElement>
+        
+        <!-- Ready Status -->
+        <ui:VisualElement name="ReadyDot" class="ready-dot"/>
+        
+    </ui:VisualElement>
+</ui:UXML>

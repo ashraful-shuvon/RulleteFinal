@@ -1,0 +1,482 @@
+/*
+ * Roulette Game HUD Styles
+ * Elite Casino Game: Roulette - In-Game Multiplayer UI
+ */
+
+/* ============================================
+   GAME HUD CONTAINER
+   ============================================ */
+
+.game-hud {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+/* ============================================
+   TOP BAR
+   ============================================ */
+
+.top-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.phase-container {
+    align-items: center;
+}
+
+.phase-label {
+    color: rgb(212, 175, 55);
+    font-size: 18px;
+    -unity-font-style: bold;
+    text-overflow: ellipsis;
+}
+
+.phase-timer-bar {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 5px;
+    height: 36px;
+    width: 200px;
+    background-color: rgba(50, 50, 50, 1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.timer-fill {
+    height: 100%;
+    width: 100%;
+    background-color: rgb(212, 175, 55);
+    border-radius: 12px;
+}
+
+.timer-label {
+    position: absolute;
+    left: 50%;
+    translate: -50% 0;
+    color: white;
+    font-size: 20px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+}
+
+/* ============================================
+   CONNECTION INFO
+   ============================================ */
+
+.connection-info {
+    flex-direction: row;
+    align-items: center;
+}
+
+.connection-dot {
+    color: rgb(100, 255, 100);
+    font-size: 20px;
+    margin-right: 8px;
+}
+
+.connection-dot.disconnected {
+    color: rgb(255, 100, 100);
+}
+
+.players-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+}
+
+/* ============================================
+   RIGHT PANEL (Players)
+   ============================================ */
+
+.right-panel {
+    position: absolute;
+    right: 5px;
+    top: 60px;
+    width: 150px;
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    border-width: 1px;
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.panel-title {
+    color: rgb(212, 175, 55);
+    font-size: 18px;
+    -unity-font-style: bold;
+    margin-bottom: 8px;
+}
+
+.players-hud-list {
+    height: 180px;
+}
+
+.invite-hud-btn {
+    height: 40px;
+    margin-top: 8px;
+    background-color: rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+    color: rgb(212, 175, 55);
+    font-size: 18px;
+}
+
+.invite-hud-btn:hover {
+    background-color: rgba(212, 175, 55, 0.5);
+}
+
+/* ============================================
+   BOTTOM BAR
+   ============================================ */
+
+.bottom-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    padding: 10px 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.bottom-bar-top-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+/* ============================================
+   BALANCE SECTION
+   ============================================ */
+
+.balance-section {
+    flex-direction: column;
+}
+
+.balance-label-small {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    margin-bottom: 2px;
+}
+
+.balance-text {
+    color: rgb(212, 175, 55);
+    font-size: 32px;
+    -unity-font-style: bold;
+}
+
+.total-bet-text {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 18px;
+    margin-top: 4px;
+}
+
+/* ============================================
+   ACTION BUTTONS
+   ============================================ */
+
+.action-buttons {
+    flex-direction: row;
+    width: 100%;
+}
+
+.action-btn {
+    flex-grow: 1;
+    height: 90px;
+    margin: 0 4px;
+    border-radius: 12px;
+    font-size: 30px;
+    -unity-font-style: bold;
+}
+
+.clear-btn {
+    background-color: rgba(200, 80, 80, 0.4);
+    color: rgb(255, 150, 150);
+}
+
+.clear-btn:hover {
+    background-color: rgba(200, 80, 80, 0.6);
+}
+
+.undo-btn {
+    background-color: rgba(150, 150, 200, 0.4);
+    color: rgb(200, 200, 255);
+}
+
+.undo-btn:hover {
+    background-color: rgba(150, 150, 200, 0.6);
+}
+
+.rebet-btn {
+    background-color: rgba(80, 180, 80, 0.4);
+    color: rgb(150, 255, 150);
+}
+
+.rebet-btn:hover {
+    background-color: rgba(80, 180, 80, 0.6);
+}
+
+.double-btn {
+    background-color: rgba(212, 175, 55, 0.4);
+    color: rgb(255, 215, 100);
+}
+
+.double-btn:hover {
+    background-color: rgba(212, 175, 55, 0.6);
+}
+
+/* ============================================
+   ROOM CODE HUD
+   ============================================ */
+
+.room-code-hud {
+    flex-direction: row;
+    align-items: center;
+}
+
+.room-code-hud-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 18px;
+}
+
+.copy-code-btn {
+    width: 40px;
+    height: 36px;
+    margin-left: 5px;
+    background-color: transparent;
+    font-size: 18px;
+}
+
+/* ============================================
+   PLAYER HUD ENTRY
+   ============================================ */
+
+.player-hud-entry {
+    flex-direction: row;
+    align-items: center;
+    padding: 6px;
+    margin-bottom: 4px;
+    background-color: rgba(40, 40, 50, 0.6);
+    border-radius: 4px;
+}
+
+.avatar-box {
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
+    background-color: rgba(212, 175, 55, 0.3);
+    margin-right: 8px;
+    position: relative;
+}
+
+.player-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+}
+
+.master-crown {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+    background-color: rgb(212, 175, 55);
+    border-radius: 6px;
+    display: none;
+}
+
+.player-hud-entry.is-master .master-crown {
+    display: flex;
+}
+
+.info-box {
+    flex-grow: 1;
+}
+
+.hud-name {
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+    -unity-font-style: bold;
+}
+
+.hud-balance {
+    color: rgb(212, 175, 55);
+    font-size: 10px;
+}
+
+.bet-indicator {
+    padding: 2px 6px;
+    background-color: rgba(80, 180, 80, 0.3);
+    border-radius: 4px;
+    margin-right: 6px;
+}
+
+.hud-bet {
+    color: rgb(150, 255, 150);
+    font-size: 10px;
+}
+
+.bet-indicator.no-bet {
+    background-color: rgba(100, 100, 100, 0.3);
+}
+
+.bet-indicator.no-bet .hud-bet {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.ready-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background-color: rgb(100, 255, 100);
+}
+
+.ready-dot.not-ready {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   RESULT POPUP
+   ============================================ */
+
+.result-popup {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.result-card {
+    width: 80%;
+    max-width: 300px;
+    padding: 30px;
+    background-color: rgba(30, 30, 40, 0.95);
+    border-radius: 16px;
+    border-width: 2px;
+    border-color: rgb(212, 175, 55);
+    align-items: center;
+}
+
+.result-number {
+    font-size: 64px;
+    -unity-font-style: bold;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.result-color {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.result-color.red {
+    background-color: rgb(200, 50, 50);
+}
+
+.result-color.black {
+    background-color: rgb(50, 50, 50);
+}
+
+.result-color.green {
+    background-color: rgb(50, 150, 50);
+}
+
+.result-win-label {
+    font-size: 28px;
+    -unity-font-style: bold;
+    color: rgb(212, 175, 55);
+    margin-bottom: 10px;
+}
+
+.win-amount-label {
+    font-size: 24px;
+    color: rgb(100, 255, 100);
+}
+
+/* ============================================
+   INVITE PANEL
+   ============================================ */
+
+.invite-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.invite-card {
+    width: 80%;
+    max-width: 300px;
+    padding: 25px;
+    background-color: rgba(30, 30, 40, 0.95);
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: rgb(212, 175, 55);
+    align-items: center;
+}
+
+.invite-title {
+    color: rgb(212, 175, 55);
+    font-size: 20px;
+    -unity-font-style: bold;
+    margin-bottom: 20px;
+}
+
+.invite-code-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.invite-room-code {
+    color: white;
+    font-size: 32px;
+    -unity-font-style: bold;
+    letter-spacing: 8px;
+    margin-bottom: 20px;
+}
+
+.copy-invite-btn {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 10px;
+    background-color: rgb(212, 175, 55);
+    border-radius: 6px;
+    color: rgb(30, 30, 40);
+    font-size: 14px;
+    -unity-font-style: bold;
+}
+
+.copy-invite-btn:hover {
+    background-color: rgb(232, 195, 75);
+}
+
+.close-invite-btn {
+    width: 100%;
+    height: 36px;
+    background-color: transparent;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.close-invite-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}

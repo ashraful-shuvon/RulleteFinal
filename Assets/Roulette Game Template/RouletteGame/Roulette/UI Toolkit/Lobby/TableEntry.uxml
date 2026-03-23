@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <!-- Table Entry for Available Tables List -->
+    <ui:VisualElement name="TableEntry" class="table-entry">
+        
+        <!-- Table Info -->
+        <ui:VisualElement name="TableInfo" class="table-info">
+            <ui:Label text="European Roulette" name="TableNameLabel" class="table-name"/>
+            <ui:Label text="Host: Player1" name="HostNameLabel" class="host-name"/>
+        </ui:VisualElement>
+        
+        <!-- Stakes Badge -->
+        <ui:VisualElement name="StakesBadge" class="stakes-badge">
+            <ui:Label text="MEDIUM" name="StakesLabel" class="stakes-label"/>
+            <ui:Label text="$10 - $1,000" name="LimitsLabel" class="limits-label"/>
+        </ui:VisualElement>
+        
+        <!-- Player Count -->
+        <ui:VisualElement name="PlayerCountBadge" class="player-count-badge">
+            <ui:Label text="2/4" name="PlayerCountLabel" class="count-label"/>
+        </ui:VisualElement>
+        
+        <!-- Join Button -->
+        <ui:Button text="Join" name="JoinTableButton" class="join-table-btn"/>
+        
+    </ui:VisualElement>
+</ui:UXML>
