@@ -16,6 +16,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [SerializeField] private byte maxPlayersPerRoom = 4;
     [SerializeField] private string lobbyScene = "Lobby";
     [SerializeField] private string rouletteScene = "RouletteGame";
+    [SerializeField] private bool useSingleSceneMode = true; // Use everything in one scene
 
     [Header("Player Settings")]
     [SerializeField] private GameObject playerPrefab;
@@ -50,13 +51,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         DontDestroyOnLoad(gameObject);
 
         // Photon settings
-        PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.AutomaticallySyncScene = !useSingleSceneMode;
     }
 
     private void Start()
     {
-        // Auto-connect on start in debug mode
-        if (isDebugMode && !PhotonNetwork.IsConnected)
+        // Auto-connect on start if using single scene mode for immediate gameplay test
+        if ((isDebugMode || useSingleSceneMode) && !PhotonNetwork.IsConnected)
         {
             ConnectToPhoton();
         }
@@ -73,6 +74,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("[NetworkManager] Already connected to Photon");
             return;
+        }
+
+        if (string.IsNullOrEmpty(PhotonNetwork.NickName))
+        {
+            SetPlayerNickname($"Guest_{Random.Range(100, 999)}");
         }
 
         Debug.Log("[NetworkManager] Connecting to Photon...");
@@ -100,8 +106,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("[NetworkManager] Connected to Master Server");
         
-        // Join the lobby to see available rooms
-        PhotonNetwork.JoinLobby();
+        if (useSingleSceneMode)
+        {
+            Debug.Log("[NetworkManager] Single Scene Mode - Auto joining random room...");
+            PhotonNetwork.JoinRandomRoom();
+        }
+        else
+        {
+            // Join the lobby to see available rooms
+            PhotonNetwork.JoinLobby();
+        }
     }
 
     public override void OnJoinedLobby()
@@ -109,8 +123,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("[NetworkManager] Joined Lobby");
         OnJoinedLobbyEvent?.Invoke();
         
-        // Load lobby scene if not already there
-        if (SceneManager.GetActiveScene().name != lobbyScene)
+        // Load lobby scene if not already there and we are not in single scene mode
+        if (!useSingleSceneMode && SceneManager.GetActiveScene().name != lobbyScene)
         {
             SceneManager.LoadScene(lobbyScene);
         }
@@ -214,10 +228,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log($"[NetworkManager] Joined room: {PhotonNetwork.CurrentRoom.Name}");
         Debug.Log($"[NetworkManager] Players in room: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
         
+        // Spawn the player prefab so they can place bets
+        if (playerPrefab != null)
+        {
+            PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
+        }
+        else
+        {
+            PhotonNetwork.Instantiate("NetworkPlayer", Vector3.zero, Quaternion.identity);
+        }
+
         OnJoinedRoomEvent?.Invoke();
 
-        // Load the game scene
-        if (SceneManager.GetActiveScene().name != rouletteScene)
+        // Load the game scene if not in single scene mode
+        if (!useSingleSceneMode && SceneManager.GetActiveScene().name != rouletteScene)
         {
             PhotonNetwork.LoadLevel(rouletteScene);
         }
@@ -228,8 +252,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("[NetworkManager] Left room");
         OnLeftRoomEvent?.Invoke();
         
-        // Return to lobby
-        SceneManager.LoadScene(lobbyScene);
+        // Return to lobby if not in single scene mode
+        if (!useSingleSceneMode)
+        {
+            SceneManager.LoadScene(lobbyScene);
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)

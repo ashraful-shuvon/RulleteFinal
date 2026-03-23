@@ -49,6 +49,11 @@ public class GameHUDController : MonoBehaviour
     private Button copyInviteCodeBtn;
     private Button closeInviteBtn;
 
+    // Chips & Settings
+    private List<Button> chipButtons = new List<Button>();
+    private bool musicOn = true;
+    private bool soundOn = true;
+
     // State
     private List<PlayerHUDInfo> playersHUD = new List<PlayerHUDInfo>();
 
@@ -63,6 +68,14 @@ public class GameHUDController : MonoBehaviour
         SetupUI();
         SetupButtonCallbacks();
         SubscribeToEvents();
+    }
+
+    private void Update()
+    {
+        if (NetworkPlayer.LocalPlayer != null)
+        {
+            UpdateBalance(NetworkPlayer.LocalPlayer.Balance, NetworkPlayer.LocalPlayer.CurrentBet);
+        }
     }
 
     private void OnDestroy()
@@ -89,6 +102,25 @@ public class GameHUDController : MonoBehaviour
         balanceText = root.Q<Label>("BalanceText");
         totalBetText = root.Q<Label>("TotalBetText");
         roomCodeLabel = root.Q<Label>("RoomCodeLabel");
+
+        // Setup Chips
+        int[] chipValues = { 1, 5, 10, 25, 100, 500 };
+        for (int i = 0; i < chipValues.Length; i++)
+        {
+            int val = chipValues[i];
+            var btn = root.Q<Button>($"Chip{val}");
+            if (btn != null)
+            {
+                chipButtons.Add(btn);
+                btn.RegisterCallback<ClickEvent>(evt => SelectChip(val, btn));
+            }
+        }
+        
+        // Setup Settings
+        var musicBtn = root.Q<Button>("MusicToggleBtn");
+        var soundBtn = root.Q<Button>("SoundToggleBtn");
+        musicBtn?.RegisterCallback<ClickEvent>(evt => ToggleMusic(musicBtn));
+        soundBtn?.RegisterCallback<ClickEvent>(evt => ToggleSound(soundBtn));
 
         // Action buttons
         clearButton = root.Q<Button>("ClearButton");
@@ -145,7 +177,6 @@ public class GameHUDController : MonoBehaviour
         {
             NetworkGameState.Instance.OnPhaseChanged += OnPhaseChanged;
             NetworkGameState.Instance.OnTimerUpdated += OnTimerUpdated;
-            NetworkGameState.Instance.OnSpinResultReceived += OnSpinResultReceived;
         }
     }
 
@@ -155,7 +186,6 @@ public class GameHUDController : MonoBehaviour
         {
             NetworkGameState.Instance.OnPhaseChanged -= OnPhaseChanged;
             NetworkGameState.Instance.OnTimerUpdated -= OnTimerUpdated;
-            NetworkGameState.Instance.OnSpinResultReceived -= OnSpinResultReceived;
         }
     }
 
@@ -297,11 +327,6 @@ public class GameHUDController : MonoBehaviour
 
     #region Result Popup
 
-    private void OnSpinResultReceived(int result)
-    {
-        ShowResult(result, 0, true);
-    }
-
     public void ShowResult(int result, float winAmount, bool isWin)
     {
         if (resultPopup == null) return;
@@ -422,6 +447,34 @@ public class GameHUDController : MonoBehaviour
         {
             GUIUtility.systemCopyBuffer = PhotonNetwork.CurrentRoom.Name;
         }
+    }
+
+    private void SelectChip(float value, Button clickedBtn)
+    {
+        ChipManager.SelectChipValue(value);
+        foreach (var btn in chipButtons)
+        {
+            btn.RemoveFromClassList("selected-chip");
+        }
+        clickedBtn.AddToClassList("selected-chip");
+    }
+
+    private void ToggleMusic(Button btn)
+    {
+        musicOn = !musicOn;
+        if(AudioManager._Instance != null && AudioManager._Instance.AudioSourceBGM != null) 
+            AudioManager._Instance.AudioSourceBGM.volume = musicOn ? 1f : 0f;
+        if(musicOn) btn.RemoveFromClassList("muted");
+        else btn.AddToClassList("muted");
+    }
+
+    private void ToggleSound(Button btn)
+    {
+        soundOn = !soundOn;
+        if(AudioManager._Instance != null) 
+            AudioManager._Instance.ToggleSound(!soundOn);
+        if(soundOn) btn.RemoveFromClassList("muted");
+        else btn.AddToClassList("muted");
     }
 
     #endregion

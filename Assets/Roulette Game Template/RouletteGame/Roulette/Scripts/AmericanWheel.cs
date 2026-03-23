@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class AmericanWheel : Wheel
@@ -27,17 +27,10 @@ public class AmericanWheel : Wheel
         }
     }
 
-    public override void Spin()
+    public void SpinToResult(int networkResult)
     {
-        print("Spin American");
+        print("Spin American Networked");
         base.Spin();
-        StartCoroutine(SetResult());
-    }
-
-    private IEnumerator SetResult()
-    {
-        yield return new WaitForSecondsRealtime(5);
-        print("Set Result");
-        ball.FindNumber(Random.Range(0, 37), false);
+        ball.FindNumber(networkResult, false);
     }
 }

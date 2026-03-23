@@ -24,6 +24,12 @@
             
         </ui:VisualElement>
         
+        <!-- Settings Toggle Buttons (Top Left) -->
+        <ui:VisualElement name="SettingsPanel" class="settings-panel">
+            <ui:Button text="♫" name="MusicToggleBtn" class="setting-btn"/>
+            <ui:Button text="🔊" name="SoundToggleBtn" class="setting-btn"/>
+        </ui:VisualElement>
+        
         <!-- Right Panel: Players List -->
         <ui:VisualElement name="RightPanel" class="right-panel">
             <ui:Label text="PLAYERS" class="panel-title"/>
@@ -47,6 +53,16 @@
                     <ui:Label text="Room: ABC123" name="RoomCodeLabel" class="room-code-hud-text"/>
                     <ui:Button text="📋" name="CopyRoomCodeBtn" class="copy-code-btn"/>
                 </ui:VisualElement>
+            </ui:VisualElement>
+            
+            <!-- Chip Selector -->
+            <ui:VisualElement name="ChipSelector" class="chip-selector">
+                <ui:Button text="$1" name="Chip1" class="chip-btn"/>
+                <ui:Button text="$5" name="Chip5" class="chip-btn"/>
+                <ui:Button text="$10" name="Chip10" class="chip-btn selected-chip"/>
+                <ui:Button text="$25" name="Chip25" class="chip-btn"/>
+                <ui:Button text="$100" name="Chip100" class="chip-btn"/>
+                <ui:Button text="$500" name="Chip500" class="chip-btn"/>
             </ui:VisualElement>
             
             <!-- Action Buttons -->

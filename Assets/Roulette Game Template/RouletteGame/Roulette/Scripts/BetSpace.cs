@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [System.Serializable]
 public enum BetType
@@ -99,47 +99,29 @@ public class BetSpace : MonoBehaviour {
 
     public void ApplyBet(float selectedValue)
     {
-        //if (!LimitBetPlate.AllowLimit(selectedValue))
-        //    return;
-
-        // Check if the selected bet exceeds the limit before applying it
-        if (!LimitBetPlate.AllowLimit(selectedValue))
+        int spaceIndex = BetSpaceRegistry.GetIndexOfBetSpace(this);
+        
+        if (NetworkPlayer.LocalPlayer == null)
         {
-            SceneRoulette.ShowWarning("Bet limit exceeded!", false);
+            Debug.LogWarning("NetworkPlayer not found. Betting disabled.");
             return;
         }
 
-        if (BalanceManager.Balance - selectedValue < 0)
-        {
-            SceneRoulette.ShowWarning("Insufficient balance! $" + BalanceManager.Balance.ToString("F2"), true);
-            return;
-        }
-
-        if (BetsEnabled && selectedValue > 0 && BalanceManager.Balance - selectedValue >= 0)
+        // The limits and balance checks are now handled locally & server-side
+        // But we still apply local checks for feedback if needed.
+        if (NetworkPlayer.LocalPlayer.PlaceBetOnSpace(spaceIndex, selectedValue))
         {
             AudioManager.SoundPlay(3);
-            print("Bet applyed! with: " + selectedValue );
-
-            BalanceManager.ChangeBalance(-selectedValue);
-            ResultManager.totalBet += selectedValue;
             stack.Add(selectedValue);
-
             lastBet = stack.GetValue();
-
-            BetPool.Instance.Add(this, selectedValue);
-
-            SceneRoulette._Instance.clearButton.interactable = true;
-            SceneRoulette._Instance.undoButton.interactable = true;
-            SceneRoulette._Instance.rollButton.interactable = true;
-            SceneRoulette._Instance.rebetButton.gameObject.SetActive(false);
+            
+            // Replaced the old manual UI interation code here with the automated GameHUD updates.
             SceneRoulette.UpdateLocalPlayerText();
         }
     }
 
     public void RemoveBet(float value)
     {
-        BalanceManager.ChangeBalance(value);
-        ResultManager.totalBet -= value;
         stack.Remove(value);
         lastBet = stack.GetValue();
         SceneRoulette.UpdateLocalPlayerText();
@@ -248,41 +230,13 @@ public class BetSpace : MonoBehaviour {
     }
     public void Rebet()
     {
-        if (lastBet == 0)
-            return;
-
-        if (!LimitBetPlate.AllowLimit(lastBet))
-        {
-            lastBet = 0;
-            return;
-        }
-
-        if (BetsEnabled && BalanceManager.Balance - lastBet >= 0)
-        {
-            BalanceManager.ChangeBalance(-lastBet);
-            ResultManager.totalBet += lastBet;
-            stack.SetValue(lastBet);
-            lastBet = stack.GetValue();
-
-            BetPool.Instance.Add(this, lastBet);
-
-            SceneRoulette._Instance.clearButton.interactable = true;
-            SceneRoulette._Instance.undoButton.interactable = true;
-            SceneRoulette._Instance.rollButton.interactable = true;
-            SceneRoulette._Instance.rebetButton.gameObject.SetActive(false);
-            SceneRoulette.UpdateLocalPlayerText();
-        }
-        else
-            lastBet = 0;
+        // Handled completely by NetworkPlayer now. 
+        // This visual space doesn't need to push rebet requests directly like the old system.
     }
     
     public void Clear()
     {
-        float val = stack.GetValue();
-        BalanceManager.ChangeBalance(val);
-        ResultManager.totalBet -= val;
         lastBet = 0;
-
         stack.Clear();
         SceneRoulette.UpdateLocalPlayerText();
     }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -15,7 +15,7 @@ public class AudioManager : MonoBehaviour
     public static float MusicVolume = 1;
     public static float SoundVolume = 1;
 
-    public SceneRoulette scene;
+
 
     private AudioSource rolingSound;
 
@@ -29,13 +29,6 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        scene.musicToggle.onValueChanged.AddListener(ToggleVolumeSlider);
-        scene.soundToggle.onValueChanged.AddListener(ToggleSound);
-    }
-
-    public void ToggleVolumeSlider(bool value)
-    {
-        scene.volumeSlider.gameObject.SetActive(value);
     }
 
     public void ToggleSound(bool value)
@@ -43,12 +36,6 @@ public class AudioManager : MonoBehaviour
         SoundVolume = value ? 0 : 1;
         if(auxiliarAS)
             auxiliarAS.volume = SoundVolume;
-    }
-
-    public void ChangeVolume()
-    {
-        MusicVolume = scene.volumeSlider.value;
-        _Instance.AudioSourceBGM.volume = MusicVolume;
     }
 
     public void AudioSourceAlloc()
@@ -84,7 +71,10 @@ public class AudioManager : MonoBehaviour
 
     public static void StopAuxiliar()
     {
-        _Instance.auxiliarAS.Stop();
+        if (_Instance != null && _Instance.auxiliarAS != null)
+        {
+            _Instance.auxiliarAS.Stop();
+        }
     }
 
     public void SoundPlayCoroutine(int iType, float fDelay)

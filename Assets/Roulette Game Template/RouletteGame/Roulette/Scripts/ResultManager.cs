@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 
 public class ResultManager : MonoBehaviour {
@@ -24,13 +24,18 @@ public class ResultManager : MonoBehaviour {
             totalWin += betSpace.ResolveBet(result);
         }
 
-       BalanceManager.ChangeBalance(totalWin);
+        var hud = FindObjectOfType<GameHUDController>();
+        if (hud != null)
+        {
+            hud.ShowResult(result, totalWin, totalWin > 0);
+        }
 
-        Instance.winSequience.ShowResult(result, totalWin);
+        if (totalWin > 0)
+        {
+            AudioManager.SoundPlay(0);
+        }
 
         totalBet = 0;
-        SceneRoulette.UpdateLocalPlayerText();
-
         ChipManager.EnableChips(true);
     }
 

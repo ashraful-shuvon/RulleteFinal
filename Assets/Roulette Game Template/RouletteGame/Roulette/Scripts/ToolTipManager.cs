@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using TMPro;
 
@@ -21,18 +21,17 @@ public class ToolTipManager : MonoBehaviour {
     {
         Target = stack;
 
-        if (Target)
+        if (Target && Instance != null && Instance.toolTip != null)
         {
             Instance.toolTip.SetActive(true);
 
             Instance.toolTip.transform.position = Camera.main.WorldToScreenPoint(Target.transform.position);
-            Instance.toolTipText.text = Target.GetValue().ToString();
-
+            if (Instance.toolTipText != null) Instance.toolTipText.text = Target.GetValue().ToString();
         }
     }
     public static void Deselect()
     {
         Target = null;
-        Instance.toolTip.SetActive(false);
+        if (Instance != null && Instance.toolTip != null) Instance.toolTip.SetActive(false);
     }
 }

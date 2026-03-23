@@ -26,6 +26,7 @@ public class NetworkPlayer : MonoBehaviourPun
 
     // Player bets for current round
     private Dictionary<int, float> currentRoundBets = new Dictionary<int, float>();
+    private Dictionary<int, float> previousRoundBets = new Dictionary<int, float>();
     private List<BetRecord> betHistory = new List<BetRecord>();
 
     // Events
@@ -74,9 +75,9 @@ public class NetworkPlayer : MonoBehaviourPun
             return false;
         }
 
-        if (NetworkGameState.Instance.CurrentPhase != GamePhase.Betting)
+        if (NetworkGameState.Instance == null || NetworkGameState.Instance.CurrentPhase != GamePhase.Betting)
         {
-            Debug.LogWarning($"[NetworkPlayer] Cannot place bet - not in betting phase");
+            Debug.LogWarning($"[NetworkPlayer] Cannot place bet - NetworkGameState is missing or not in betting phase");
             return false;
         }
 
@@ -98,7 +99,8 @@ public class NetworkPlayer : MonoBehaviourPun
         betHistory.Add(new BetRecord { BetSpaceIndex = betSpaceIndex, Amount = amount });
 
         // Notify network
-        NetworkGameState.Instance.PlaceBet(betSpaceIndex, amount);
+        if (NetworkGameState.Instance != null)
+            NetworkGameState.Instance.PlaceBet(betSpaceIndex, amount);
 
         // Trigger events
         OnBalanceChanged?.Invoke(Balance);
@@ -143,6 +145,13 @@ public class NetworkPlayer : MonoBehaviourPun
 
         OnBalanceChanged?.Invoke(Balance);
 
+        // Update visuals
+        BetSpace space = BetSpaceRegistry.GetBetSpaceByIndex(lastBet.BetSpaceIndex);
+        if (space != null && space.stack != null)
+        {
+            space.stack.Remove(lastBet.Amount);
+        }
+
         Debug.Log($"[NetworkPlayer] Undid bet of {lastBet.Amount} on space {lastBet.BetSpaceIndex}");
 
         return true;
@@ -157,7 +166,18 @@ public class NetworkPlayer : MonoBehaviourPun
         Balance += CurrentBet;
         CurrentBet = 0;
 
+        // Clear visuals
+        foreach (var bet in betHistory)
+        {
+            BetSpace space = BetSpaceRegistry.GetBetSpaceByIndex(bet.BetSpaceIndex);
+            if (space != null && space.stack != null)
+            {
+                space.stack.Clear();
+            }
+        }
+
         // Clear records
+        previousRoundBets.Clear();
         currentRoundBets.Clear();
         betHistory.Clear();
 
@@ -171,8 +191,34 @@ public class NetworkPlayer : MonoBehaviourPun
     /// </summary>
     public void RepeatLastBets()
     {
-        // This would store previous round bets and re-apply them
-        Debug.Log($"[NetworkPlayer] Repeating last bets");
+        if (previousRoundBets == null || previousRoundBets.Count == 0)
+        {
+            Debug.LogWarning("[NetworkPlayer] No previous bets to repeat.");
+            return;
+        }
+
+        float totalNeeded = 0;
+        foreach (var amount in previousRoundBets.Values) totalNeeded += amount;
+
+        if (Balance < totalNeeded)
+        {
+            Debug.LogWarning("[NetworkPlayer] Insufficient balance to rebet.");
+            return;
+        }
+
+        foreach (var kvp in previousRoundBets)
+        {
+            if (PlaceBetOnSpace(kvp.Key, kvp.Value))
+            {
+                BetSpace space = BetSpaceRegistry.GetBetSpaceByIndex(kvp.Key);
+                if (space != null && space.stack != null)
+                {
+                    space.stack.Add(kvp.Value);
+                }
+            }
+        }
+
+        Debug.Log($"[NetworkPlayer] Repeating last bets. Total placed: {totalNeeded}");
     }
 
     /// <summary>
@@ -192,7 +238,14 @@ public class NetworkPlayer : MonoBehaviourPun
         Dictionary<int, float> betsCopy = new Dictionary<int, float>(currentRoundBets);
         foreach (var kvp in betsCopy)
         {
-            PlaceBetOnSpace(kvp.Key, kvp.Value);
+            if (PlaceBetOnSpace(kvp.Key, kvp.Value))
+            {
+                BetSpace space = BetSpaceRegistry.GetBetSpaceByIndex(kvp.Key);
+                if (space != null && space.stack != null)
+                {
+                    space.stack.Add(kvp.Value);
+                }
+            }
         }
 
         Debug.Log($"[NetworkPlayer] Doubled all bets. Total bet: {CurrentBet}");
@@ -209,6 +262,10 @@ public class NetworkPlayer : MonoBehaviourPun
     public void ReceiveWinnings(float amount)
     {
         Balance += amount;
+        
+        // Save round bets for Rebet before clearing
+        previousRoundBets = new Dictionary<int, float>(currentRoundBets);
+        
         CurrentBet = 0;
 
         // Clear for next round

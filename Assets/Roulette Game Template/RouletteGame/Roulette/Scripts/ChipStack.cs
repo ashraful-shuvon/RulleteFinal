@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using DG.Tweening;
 using System.Collections.Generic;
 using System;
@@ -87,10 +87,16 @@ public class ChipStack : MonoBehaviour {
             value = nextValue;
 
             GameObject newChip = ChipManager.InstantiateChip(currentChipIndex);
-            newChip.transform.parent = gameObject.transform;
-            newChip.transform.localPosition = new Vector3(0, .01f * (chips.Count + 1), 0);
-
-            chips.Add(newChip);
+            if (newChip != null)
+            {
+                newChip.transform.parent = gameObject.transform;
+                newChip.transform.localPosition = new Vector3(0, .01f * (chips.Count + 1), 0);
+                chips.Add(newChip);
+            }
+            else
+            {
+                Debug.LogWarning($"[ChipStack] Failed to spawn visual chip. Index {currentChipIndex} missing in ChipManager.Chips array!");
+            }
         }
     }
     /*

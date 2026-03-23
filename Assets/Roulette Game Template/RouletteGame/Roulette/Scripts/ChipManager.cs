@@ -1,34 +1,36 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class ChipManager : MonoBehaviour {
 
-    public static Chip selected = null;
+    // Removed legacy Canvas dependencies
+    public static float currentlySelectedValue = 10f; // Default 10 chip
     private static ChipManager Instance;
 
-    public GameObject[] Chips;
-    public CanvasGroup cg;
+    public GameObject[] Chips; // 3D Chips for visual instantiation
 
     private void Awake()
     {
         Instance = this;
-        cg = gameObject.AddComponent<CanvasGroup>();
     }
 
     public static GameObject InstantiateChip(int index)
     {
+        if (Instance == null || Instance.Chips == null || Instance.Chips.Length <= index) return null;
         return Instantiate(Instance.Chips[index]);
     }
 
     public static float GetSelectedValue()
     {
-        if(selected != null)
-            return selected.value;
+        return currentlySelectedValue;
+    }
 
-        return 0;
+    public static void SelectChipValue(float val)
+    {
+        currentlySelectedValue = val;
     }
 
     public static void EnableChips(bool enable)
     {
-        Instance.cg.interactable = enable;
+        // UI Toolkit handles this now if needed
     }
 }

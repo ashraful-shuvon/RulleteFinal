@@ -57,6 +57,28 @@ public class LobbyPanelController : MonoBehaviour
         SetupUI();
         SetupButtonCallbacks();
         UpdateUI();
+
+        // Subscribing to networked events to act as an in-game overlay
+        if (NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.OnJoinedRoomEvent += OnJoinedRoomEvent;
+            NetworkManager.Instance.OnLeftRoomEvent += ShowPanel;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (NetworkManager.Instance != null)
+        {
+            NetworkManager.Instance.OnJoinedRoomEvent -= OnJoinedRoomEvent;
+            NetworkManager.Instance.OnLeftRoomEvent -= ShowPanel;
+        }
+    }
+
+    private void OnJoinedRoomEvent()
+    {
+        // Automatically hide the Lobby overlay when successfully joining a table
+        HidePanel();
     }
 
     private void SetupUI()

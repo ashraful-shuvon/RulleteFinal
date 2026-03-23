@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -46,10 +46,6 @@ public class BetPool : MonoBehaviour
         _BetFootprints.Clear();
         _BetsList.Clear();
 
-        SceneRoulette._Instance.rollButton.interactable = false;
-        SceneRoulette._Instance.undoButton.interactable = false;
-        SceneRoulette._Instance.clearButton.interactable = false;
-
         ResultManager.totalBet = 0;
     }
 
@@ -62,10 +58,6 @@ public class BetPool : MonoBehaviour
         {
             _BetsList.Remove(footprint.betSpace);
         }
-
-        SceneRoulette._Instance.clearButton.interactable = _BetFootprints.Count > 0;
-        SceneRoulette._Instance.undoButton.interactable = _BetFootprints.Count > 0;
-        SceneRoulette._Instance.rollButton.interactable = _BetFootprints.Count > 0;
     }
 
     public IEnumerator Rebet()
@@ -78,10 +70,6 @@ public class BetPool : MonoBehaviour
             bet.Rebet();
             yield return null;
         }
-
-
-        SceneRoulette._Instance.clearButton.interactable = true;
-        SceneRoulette._Instance.undoButton.interactable = true;
     }
 }
 

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class EuropeanWheel : Wheel
@@ -26,16 +26,10 @@ public class EuropeanWheel : Wheel
         }
     }
 
-    public override void Spin()
+    public void SpinToResult(int networkResult)
     {
-        print("Spin European");
+        print("Spin European Networked");
         base.Spin();
-        StartCoroutine(SetResult());
-    }
-
-    private IEnumerator SetResult()
-    {
-        yield return new WaitForSecondsRealtime(5);
-        ball.FindNumber(Random.Range(0, 36), true);
+        ball.FindNumber(networkResult, true);
     }
 }

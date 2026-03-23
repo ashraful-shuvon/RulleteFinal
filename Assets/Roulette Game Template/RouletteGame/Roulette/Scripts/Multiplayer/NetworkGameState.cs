@@ -66,6 +66,11 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
         
         // Initialize bet space registry
         BetSpaceRegistry.Initialize();
+
+        if (PhotonNetwork.InRoom && PhotonNetwork.IsMasterClient && CurrentPhase == GamePhase.Waiting)
+        {
+            StartNewRound();
+        }
     }
 
     private void Update()
@@ -130,7 +135,6 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
             _ => 0f
         };
 
-        // Special actions for phases
         switch (nextPhase)
         {
             case GamePhase.Spinning:
@@ -141,6 +145,10 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
                 break;
             case GamePhase.Betting:
                 ClearAllBets();
+                if (SceneRoulette._Instance != null && SceneRoulette._Instance.camCtrl != null)
+                {
+                    SceneRoulette._Instance.camCtrl.GoToOrigin();
+                }
                 break;
         }
 
@@ -212,14 +220,23 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
         TriggerWheelSpin(result);
     }
 
-    /// <summary>
-    /// Trigger wheel spin animation on all clients
-    /// </summary>
     private void TriggerWheelSpin(int result)
     {
-        // This will be called by the wheel's networked component
-        // The wheel will receive the result and animate accordingly
         Debug.Log($"[NetworkGameState] Triggering wheel spin for result: {result}");
+        
+        if (SceneRoulette._Instance != null && SceneRoulette._Instance.camCtrl != null)
+        {
+            SceneRoulette._Instance.camCtrl.GoToTarget();
+        }
+
+        if (IsEuropeanWheel && europeanWheel != null)
+        {
+            europeanWheel.SpinToResult(result);
+        }
+        else if (!IsEuropeanWheel && americanWheel != null)
+        {
+            americanWheel.SpinToResult(result);
+        }
     }
 
     #endregion
@@ -406,6 +423,15 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
     #endregion
 
     #region Room Property Callbacks
+
+    public override void OnJoinedRoom()
+    {
+        base.OnJoinedRoom();
+        if (PhotonNetwork.IsMasterClient && CurrentPhase == GamePhase.Waiting)
+        {
+            StartNewRound();
+        }
+    }
 
     public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
     {
