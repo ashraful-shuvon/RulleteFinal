@@ -24,6 +24,7 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
     // Current game state
     public GamePhase CurrentPhase { get; private set; } = GamePhase.Waiting;
     public float PhaseTimeRemaining { get; private set; } = 0f;
+    private double currentPhaseEndTime = 0f;
     public int LastResult { get; private set; } = -1;
     public bool IsEuropeanWheel { get; private set; } = true;
 
@@ -75,23 +76,16 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
 
     private void Update()
     {
-        // Only Master Client manages the timer
-        if (!PhotonNetwork.IsMasterClient) return;
-
-        if (CurrentPhase != GamePhase.Waiting)
+        if (CurrentPhase != GamePhase.Waiting && PhotonNetwork.InRoom)
         {
-            PhaseTimeRemaining -= Time.deltaTime;
-            
-            // Broadcast timer sync every second
-            if (Time.frameCount % 60 == 0)
-            {
-                SendTimerSync(PhaseTimeRemaining);
-            }
+            // All clients update time smoothly based on synced server clock
+            PhaseTimeRemaining = (float)(currentPhaseEndTime - PhotonNetwork.Time);
+            if (PhaseTimeRemaining < 0) PhaseTimeRemaining = 0f;
 
             OnTimerUpdated?.Invoke(PhaseTimeRemaining);
 
-            // Phase transitions
-            if (PhaseTimeRemaining <= 0)
+            // Phase transitions strictly handled by Master Client
+            if (PhotonNetwork.IsMasterClient && PhaseTimeRemaining <= 0)
             {
                 AdvancePhase();
             }
@@ -161,6 +155,7 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
     private void SetPhase(GamePhase phase, float duration)
     {
         CurrentPhase = phase;
+        currentPhaseEndTime = PhotonNetwork.InRoom ? PhotonNetwork.Time + duration : 0;
         PhaseTimeRemaining = duration;
 
         // Update room properties
@@ -169,14 +164,14 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
             Hashtable props = new Hashtable
             {
                 { "GamePhase", (int)phase },
-                { "PhaseEndTime", PhotonNetwork.Time + duration }
+                { "PhaseEndTime", currentPhaseEndTime }
             };
             PhotonNetwork.CurrentRoom.SetCustomProperties(props);
         }
 
-        // Broadcast phase change event
-        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(PHASE_CHANGE_EVENT, new object[] { (int)phase, duration }, options, SendOptions.SendReliable);
+        // Broadcast phase change event (Avoid self-receiving to prevent timer bounce)
+        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+        PhotonNetwork.RaiseEvent(PHASE_CHANGE_EVENT, new object[] { (int)phase, duration, currentPhaseEndTime }, options, SendOptions.SendReliable);
 
         Debug.Log($"[NetworkGameState] Phase changed to: {phase}");
         OnPhaseChanged?.Invoke(phase);
@@ -366,9 +361,6 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
             case CLEAR_BETS_EVENT:
                 HandleClearBetsEvent();
                 break;
-            case TIMER_SYNC_EVENT:
-                HandleTimerSyncEvent(photonEvent);
-                break;
         }
     }
 
@@ -377,6 +369,10 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
         object[] data = (object[])photonEvent.CustomData;
         GamePhase phase = (GamePhase)data[0];
         float duration = (float)data[1];
+        if (data.Length > 2)
+        {
+            currentPhaseEndTime = (double)data[2];
+        }
 
         CurrentPhase = phase;
         PhaseTimeRemaining = duration;
@@ -407,19 +403,6 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
         Debug.Log("[NetworkGameState] Bets cleared event received");
     }
 
-    private void HandleTimerSyncEvent(EventData photonEvent)
-    {
-        float timeRemaining = (float)photonEvent.CustomData;
-        PhaseTimeRemaining = timeRemaining;
-        OnTimerUpdated?.Invoke(timeRemaining);
-    }
-
-    private void SendTimerSync(float timeRemaining)
-    {
-        RaiseEventOptions options = new RaiseEventOptions { Receivers = ReceiverGroup.All };
-        PhotonNetwork.RaiseEvent(TIMER_SYNC_EVENT, timeRemaining, options, SendOptions.SendReliable);
-    }
-
     #endregion
 
     #region Room Property Callbacks
@@ -447,8 +430,7 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
 
         if (propertiesThatChanged.TryGetValue("PhaseEndTime", out object endTime))
         {
-            double endTimeDouble = (double)endTime;
-            PhaseTimeRemaining = (float)(endTimeDouble - PhotonNetwork.Time);
+            currentPhaseEndTime = (double)endTime;
         }
     }
 
