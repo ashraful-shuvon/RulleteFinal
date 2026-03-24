@@ -37,6 +37,8 @@ public class IAPManager : MonoBehaviour, IDetailedStoreListener
 
     void Start()
     {
+        OverridePackages();
+
         if (storeController == null)
         {
             InitializePurchasing();
@@ -65,6 +67,18 @@ public class IAPManager : MonoBehaviour, IDetailedStoreListener
                 btnScript.Setup(package);
             }
         }
+    }
+
+    private void OverridePackages()
+    {
+        Sprite defaultIcon = packages != null && packages.Length > 0 ? packages[0].icon : null;
+        
+        packages = new IAPPackage[]
+        {
+            new IAPPackage { packageName = "50K CHIPS", chipAmount = 50000, price = 2.99f, productID = "com.casino.roulette.50k", icon = defaultIcon },
+            new IAPPackage { packageName = "150K CHIPS", chipAmount = 150000, price = 4.99f, productID = "com.casino.roulette.150k", icon = defaultIcon },
+            new IAPPackage { packageName = "300K CHIPS", chipAmount = 300000, price = 7.99f, productID = "com.casino.roulette.300k", icon = defaultIcon }
+        };
     }
 
     public void InitializePurchasing()

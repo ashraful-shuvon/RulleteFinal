@@ -290,8 +290,8 @@ public class GameHUDController : MonoBehaviourPunCallbacks
 
     public void UpdateBalance(float balance, float currentBet)
     {
-        if (balanceText != null) balanceText.text = $"${balance:N0}";
-        if (totalBetText != null) totalBetText.text = $"Current Bet: ${currentBet:N0}";
+        if (balanceText != null) balanceText.text = $"{balance:N0} CHIPS";
+        if (totalBetText != null) totalBetText.text = $"Current Bet: {currentBet:N0}";
     }
 
     #endregion
@@ -311,8 +311,8 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         var readyDot = element.Q<VisualElement>("ReadyDot");
 
         if (nameLabel != null) nameLabel.text = player.Name;
-        if (balanceLabel != null) balanceLabel.text = $"${player.Balance:N0}";
-        if (betLabel != null) betLabel.text = player.Bet > 0 ? $"${player.Bet:N0}" : "$0";
+        if (balanceLabel != null) balanceLabel.text = $"{player.Balance:N0} CHIPS";
+        if (betLabel != null) betLabel.text = player.Bet > 0 ? $"{player.Bet:N0}" : "0";
 
         if (masterCrown != null)
         {

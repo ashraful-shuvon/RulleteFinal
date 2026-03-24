@@ -10,9 +10,19 @@
             <!-- Phase Indicator -->
             <ui:VisualElement name="PhaseContainer" class="phase-container">
                 <ui:Label text="PLACE YOUR BETS" name="PhaseLabel" class="phase-label"/>
-                <ui:VisualElement name="PhaseTimerBar" class="phase-timer-bar">
-                    <ui:VisualElement name="TimerFill" class="timer-fill"/>
-                    <ui:Label text="15" name="TimerLabel" class="timer-label"/>
+                
+                <!-- Timer and Settings inline row -->
+                <ui:VisualElement class="phase-timer-row">
+                    <ui:VisualElement name="PhaseTimerBar" class="phase-timer-bar">
+                        <ui:VisualElement name="TimerFill" class="timer-fill"/>
+                        <ui:Label text="15" name="TimerLabel" class="timer-label"/>
+                    </ui:VisualElement>
+                    
+                    <ui:VisualElement name="SettingsPanel" class="settings-panel">
+                        <ui:Button text="🛒" name="ShopButton" class="setting-btn shop-btn"/>
+                        <ui:Button text="♫" name="MusicToggleBtn" class="setting-btn"/>
+                        <ui:Button text="🔊" name="SoundToggleBtn" class="setting-btn"/>
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
             
@@ -24,17 +34,10 @@
             
         </ui:VisualElement>
         
-        <!-- Settings Toggle Buttons (Top Left) -->
-        <ui:VisualElement name="SettingsPanel" class="settings-panel">
-            <ui:Button text="🛒" name="ShopButton" class="setting-btn shop-btn"/>
-            <ui:Button text="♫" name="MusicToggleBtn" class="setting-btn"/>
-            <ui:Button text="🔊" name="SoundToggleBtn" class="setting-btn"/>
-        </ui:VisualElement>
-        
         <!-- Right Panel: Players List -->
         <ui:VisualElement name="RightPanel" class="right-panel">
             <ui:Label text="PLAYERS" class="panel-title"/>
-            <ui:ListView name="PlayersList" class="players-hud-list"/>
+            <ui:ListView name="PlayersList" class="players-hud-list" fixed-item-height="55"/>
             <ui:Button text="Invite" name="InviteButton" class="invite-hud-btn"/>
         </ui:VisualElement>
         
