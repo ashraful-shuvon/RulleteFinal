@@ -89,6 +89,17 @@
             </ui:VisualElement>
         </ui:VisualElement>
         
+        <!-- Main Menu Panel (Visible by default until room joined) -->
+        <ui:VisualElement name="MainMenuPanel" class="invite-panel"> <!-- Reusing full-screen dark glass -->
+            <ui:VisualElement name="MainMenuCard" class="invite-card">
+                <ui:Label text="CHOOSE GAME" class="invite-title"/>
+                <ui:Button text="Quick Play" name="QuickPlayBtn" class="copy-invite-btn"/>
+                <ui:Label text="- OR -" class="menu-divider-text"/>
+                <ui:TextField name="JoinCodeInput" class="join-code-input" text="ROOM CODE"/>
+                <ui:Button text="Join Friends" name="JoinCodeBtn" class="join-friends-btn"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
         <!-- Invite Panel (Hidden by default) -->
         <ui:VisualElement name="InvitePanel" class="invite-panel" style="display: none;">
             <ui:VisualElement name="InviteCard" class="invite-card">

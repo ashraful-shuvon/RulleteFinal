@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
     {
         // Adjust default Z position to better fit the board inside the screen
         Vector3 newPos = transform.position;
-        newPos.z = 0.02f;
+        newPos.z = 0.27f;
         transform.position = newPos;
 
         originPosition = transform.position;

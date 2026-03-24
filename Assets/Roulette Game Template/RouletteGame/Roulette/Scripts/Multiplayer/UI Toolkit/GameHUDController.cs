@@ -59,6 +59,12 @@ public class GameHUDController : MonoBehaviourPunCallbacks
     private bool musicOn = true;
     private bool soundOn = true;
 
+    // Main Menu
+    private VisualElement mainMenuPanel;
+    private Button quickPlayBtn;
+    private TextField joinCodeInput;
+    private Button joinCodeBtn;
+
     // State
     private List<PlayerHUDInfo> playersHUD = new List<PlayerHUDInfo>();
 
@@ -167,16 +173,40 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         HideInvitePanel();
         if (storePanel != null) storePanel.style.display = DisplayStyle.None;
 
+        // Main Menu
+        mainMenuPanel = root.Q<VisualElement>("MainMenuPanel");
+        quickPlayBtn = root.Q<Button>("QuickPlayBtn");
+        joinCodeInput = root.Q<TextField>("JoinCodeInput");
+        joinCodeBtn = root.Q<Button>("JoinCodeBtn");
+
+        if (mainMenuPanel != null)
+        {
+            mainMenuPanel.style.display = PhotonNetwork.InRoom ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
         // Initial update
         UpdateBalance(3000, 0);
         UpdatePhase(GamePhase.Waiting, 0);
         UpdatePlayersList(); // Update the hardcoded 2/4 text
     }
 
-    public override void OnJoinedRoom() => UpdatePlayersList();
+    public override void OnJoinedRoom() 
+    {
+        UpdatePlayersList();
+        if (mainMenuPanel != null) mainMenuPanel.style.display = DisplayStyle.None;
+    }
+    
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer) => UpdatePlayersList();
+    
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer) => UpdatePlayersList();
+    
     public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient) => UpdatePlayersList();
+    
+    public override void OnLeftRoom()
+    {
+        UpdatePlayersList();
+        if (mainMenuPanel != null) mainMenuPanel.style.display = DisplayStyle.Flex;
+    }
 
     private void SetupButtonCallbacks()
     {
@@ -196,6 +226,26 @@ public class GameHUDController : MonoBehaviourPunCallbacks
 
         restorePurchasesBtn?.RegisterCallback<ClickEvent>(evt => {
             if (IAPManager.Instance != null) IAPManager.Instance.RestorePurchases();
+        });
+
+        quickPlayBtn?.RegisterCallback<ClickEvent>(evt => {
+            if (NetworkManager.Instance != null && NetworkManager.Instance.IsConnected)
+            {
+                AudioManager.SoundPlay(3);
+                NetworkManager.Instance.JoinRandomRoom();
+            }
+        });
+
+        joinCodeBtn?.RegisterCallback<ClickEvent>(evt => {
+            if (NetworkManager.Instance != null && NetworkManager.Instance.IsConnected && joinCodeInput != null)
+            {
+                AudioManager.SoundPlay(3);
+                string code = joinCodeInput.value.Trim();
+                if (!string.IsNullOrEmpty(code) && code != "ROOM CODE")
+                {
+                    NetworkManager.Instance.JoinRoom(code);
+                }
+            }
         });
     }
 

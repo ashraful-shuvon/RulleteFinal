@@ -150,7 +150,7 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: stretch;
-    padding: 20px 20px;
+    padding: 20px 50px 30px 50px; /* Crucial hardware curve safety padding */
     background-color: rgba(0, 0, 0, 0.85);
 }
 
@@ -158,7 +158,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 25px;
+    margin-bottom: 12px;
 }
 
 /* ============================================
@@ -171,20 +171,20 @@
 
 .balance-label-small {
     color: rgba(255, 255, 255, 0.6);
-    font-size: 28px;
-    margin-bottom: 4px;
+    font-size: 18px;
+    margin-bottom: 2px;
 }
 
 .balance-text {
     color: rgb(212, 175, 55);
-    font-size: 56px;
+    font-size: 38px;
     -unity-font-style: bold;
 }
 
 .total-bet-text {
     color: rgba(255, 255, 255, 0.8);
-    font-size: 36px;
-    margin-top: 8px;
+    font-size: 20px;
+    margin-top: 4px;
 }
 
 /* ============================================
@@ -198,10 +198,10 @@
 
 .action-btn {
     flex-grow: 1;
-    height: 130px;
-    margin: 0 8px;
-    border-radius: 20px;
-    font-size: 42px;
+    height: 70px;
+    margin: 0 4px;
+    border-radius: 12px;
+    font-size: 18px; /* Slightly smaller to fit the massive padding constraints gracefully */
     -unity-font-style: bold;
 }
 
@@ -252,16 +252,16 @@
 
 .room-code-hud-text {
     color: rgba(255, 255, 255, 0.6);
-    font-size: 28px;
+    font-size: 16px;
 }
 
 .copy-code-btn {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     margin-left: 10px;
     background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    font-size: 28px;
+    border-radius: 8px;
+    font-size: 18px;
     color: white;
 }
 
@@ -473,6 +473,42 @@
     margin-bottom: 30px;
 }
 
+.menu-divider-text {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 20px;
+    margin: 15px 0;
+    -unity-font-style: bold;
+}
+
+.join-code-input {
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: rgba(50, 50, 60, 0.8);
+    color: white;
+    font-size: 32px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    border-radius: 12px;
+    height: 80px;
+    border-width: 2px;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.join-friends-btn {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 20px;
+    background-color: rgba(100, 255, 100, 0.8);
+    border-radius: 12px;
+    color: rgb(20, 40, 20);
+    font-size: 28px;
+    -unity-font-style: bold;
+}
+
+.join-friends-btn:hover {
+    background-color: rgb(120, 255, 120);
+}
+
 .invite-code-label {
     color: rgba(255, 255, 255, 0.7);
     font-size: 24px;
@@ -550,19 +586,19 @@
 .chip-selector {
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .chip-btn {
-    width: 100px;
-    height: 100px;
-    border-radius: 50px;
-    margin: 0 10px;
-    font-size: 32px;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    margin: 0 4px;
+    font-size: 22px;
     -unity-font-style: bold;
     background-color: rgba(50, 50, 60, 0.8);
     color: white;
-    border-width: 4px;
+    border-width: 2px;
     border-color: rgba(255, 255, 255, 0.3);
 }
 

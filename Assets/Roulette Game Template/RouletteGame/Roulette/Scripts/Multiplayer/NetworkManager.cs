@@ -108,8 +108,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         
         if (useSingleSceneMode)
         {
-            Debug.Log("[NetworkManager] Single Scene Mode - Auto joining random room...");
-            PhotonNetwork.JoinRandomRoom();
+            Debug.Log("[NetworkManager] Waiting for player to select Quick Play or enter an Invite Code...");
+            // UI Toolkit Main Menu Panel will handle JoinRandomRoom() or JoinRoom()
         }
         else
         {
