@@ -141,10 +141,6 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
                 break;
             case GamePhase.Betting:
                 ClearAllBets();
-                if (SceneRoulette._Instance != null && SceneRoulette._Instance.camCtrl != null)
-                {
-                    SceneRoulette._Instance.camCtrl.GoToOrigin();
-                }
                 break;
         }
 
@@ -490,11 +486,24 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
     private void OnEnable()
     {
         PhotonNetwork.AddCallbackTarget(this);
+        OnPhaseChanged += LocalPhaseCameraSync;
     }
 
     private void OnDisable()
     {
         PhotonNetwork.RemoveCallbackTarget(this);
+        OnPhaseChanged -= LocalPhaseCameraSync;
+    }
+
+    private void LocalPhaseCameraSync(GamePhase phase)
+    {
+        if (phase == GamePhase.Betting)
+        {
+            if (SceneRoulette._Instance != null && SceneRoulette._Instance.camCtrl != null)
+            {
+                SceneRoulette._Instance.camCtrl.GoToOrigin();
+            }
+        }
     }
 }
 

@@ -301,7 +301,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private string GenerateRoomName()
     {
-        return $"Roulette_{Random.Range(1000, 9999)}";
+        return Random.Range(1000, 9999).ToString();
     }
 
     private int GetMinBetForStakes(TableStakes stakes)

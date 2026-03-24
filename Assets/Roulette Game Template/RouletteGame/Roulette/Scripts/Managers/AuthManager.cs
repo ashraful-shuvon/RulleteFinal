@@ -20,16 +20,7 @@ public class AuthManager : MonoBehaviour
 
     void Start()
     {
-        string savedEmail = PlayerPrefs.GetString("SavedEmail", "");
-        string savedPassword = PlayerPrefs.GetString("SavedPassword", "");
-
-        if (!string.IsNullOrEmpty(savedEmail) && !string.IsNullOrEmpty(savedPassword))
-        {
-            if (EmailInputField != null) EmailInputField.text = savedEmail;
-            if (PasswordInputField != null) PasswordInputField.text = savedPassword;
-            Debug.Log("Found saved credentials. Attempting auto-login...");
-            loginWithEmail();
-        }
+        // Removed auto-login check, this is now handled cleanly in SplashManager.cs
     }
 
     void login()
