@@ -21,7 +21,7 @@
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
-    padding: 30px 60px 20px 120px; /* Big 120px left margin for landscape notch */
+    padding: 40px 30px 20px 30px; /* Top padding to clear portrait notch, anchored left/right */
     background-color: rgba(0, 0, 0, 0.7);
     border-bottom-width: 1px;
     border-bottom-color: rgba(212, 175, 55, 0.3);
