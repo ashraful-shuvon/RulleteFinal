@@ -20,7 +20,16 @@ public class AuthManager : MonoBehaviour
 
     void Start()
     {
-        //login();
+        string savedEmail = PlayerPrefs.GetString("SavedEmail", "");
+        string savedPassword = PlayerPrefs.GetString("SavedPassword", "");
+
+        if (!string.IsNullOrEmpty(savedEmail) && !string.IsNullOrEmpty(savedPassword))
+        {
+            if (EmailInputField != null) EmailInputField.text = savedEmail;
+            if (PasswordInputField != null) PasswordInputField.text = savedPassword;
+            Debug.Log("Found saved credentials. Attempting auto-login...");
+            loginWithEmail();
+        }
     }
 
     void login()
@@ -93,7 +102,7 @@ public class AuthManager : MonoBehaviour
         }
     }
 
-    // Step 2: PlayFab database verification — called after registration success.
+    // Step 2: PlayFab database verification - called after registration success.
     // Attempts a login with the registered credentials to confirm the account
     // truly exists in PlayFab before loading the game scene.
     private void VerifyEmailExistsInPlayFab(string email, string password)
@@ -108,9 +117,13 @@ public class AuthManager : MonoBehaviour
 
         PlayFabClientAPI.LoginWithEmailAddress(
             request,
-            // Account confirmed in PlayFab — safe to proceed
+            // Account confirmed in PlayFab - safe to proceed
             verifyResult =>
             {
+                PlayerPrefs.SetString("SavedEmail", email);
+                PlayerPrefs.SetString("SavedPassword", password);
+                PlayerPrefs.Save();
+
                 Debug.Log($"Email verified in PlayFab database. PlayFabId: {verifyResult.PlayFabId}");
                 SceneManager.LoadScene("EuropeanRoulette_mobile");
             },
@@ -159,12 +172,22 @@ public class AuthManager : MonoBehaviour
 
     private void OnLoginSuccess(LoginResult result)
     {
+        if (EmailInputField != null && PasswordInputField != null && !string.IsNullOrEmpty(EmailInputField.text))
+        {
+            PlayerPrefs.SetString("SavedEmail", EmailInputField.text);
+            PlayerPrefs.SetString("SavedPassword", PasswordInputField.text);
+            PlayerPrefs.Save();
+        }
+
         Debug.Log($"Login successful! {result.NewlyCreated} , {result.PlayFabId} , {result.LastLoginTime}");
         SceneManager.LoadScene("EuropeanRoulette_mobile");
     }
 
     private void OnLoginFailure(PlayFabError error)
     {
+        PlayerPrefs.DeleteKey("SavedEmail");
+        PlayerPrefs.DeleteKey("SavedPassword");
+        PlayerPrefs.Save();
         Debug.LogError("Login failed: " + error.GenerateErrorReport());
     }
 }

@@ -229,24 +229,61 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         });
 
         quickPlayBtn?.RegisterCallback<ClickEvent>(evt => {
-            if (NetworkManager.Instance != null && NetworkManager.Instance.IsConnected)
+            bool isReadyForRoom = Photon.Pun.PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.ConnectedToMasterServer || Photon.Pun.PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.JoinedLobby;
+            if (!isReadyForRoom)
             {
+                if (quickPlayBtn.text == "Connecting...") return; // Single fire
+                quickPlayBtn.text = "Connecting...";
+                StartCoroutine(WaitAndJoinRandom());
+                return;
+            }
+            if (NetworkManager.Instance != null)
+            {
+                quickPlayBtn.text = "Quick Play";
                 AudioManager.SoundPlay(3);
                 NetworkManager.Instance.JoinRandomRoom();
             }
         });
 
         joinCodeBtn?.RegisterCallback<ClickEvent>(evt => {
-            if (NetworkManager.Instance != null && NetworkManager.Instance.IsConnected && joinCodeInput != null)
+            string code = joinCodeInput != null ? joinCodeInput.value.Trim() : "";
+            if (string.IsNullOrEmpty(code) || code == "ROOM CODE") return;
+
+            bool isReadyForRoom = Photon.Pun.PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.ConnectedToMasterServer || Photon.Pun.PhotonNetwork.NetworkClientState == Photon.Realtime.ClientState.JoinedLobby;
+            if (!isReadyForRoom)
             {
+                if (joinCodeBtn.text == "Connecting...") return; // Single fire
+                joinCodeBtn.text = "Connecting...";
+                StartCoroutine(WaitAndJoinSpecific(code));
+                return;
+            }
+            if (NetworkManager.Instance != null)
+            {
+                joinCodeBtn.text = "Join Friends";
                 AudioManager.SoundPlay(3);
-                string code = joinCodeInput.value.Trim();
-                if (!string.IsNullOrEmpty(code) && code != "ROOM CODE")
-                {
-                    NetworkManager.Instance.JoinRoom(code);
-                }
+                NetworkManager.Instance.JoinRoom(code);
             }
         });
+    }
+
+    private System.Collections.IEnumerator WaitAndJoinRandom()
+    {
+        while (Photon.Pun.PhotonNetwork.NetworkClientState != Photon.Realtime.ClientState.ConnectedToMasterServer && Photon.Pun.PhotonNetwork.NetworkClientState != Photon.Realtime.ClientState.JoinedLobby)
+            yield return null;
+
+        if (quickPlayBtn != null) quickPlayBtn.text = "Quick Play";
+        AudioManager.SoundPlay(3);
+        if (NetworkManager.Instance != null) NetworkManager.Instance.JoinRandomRoom();
+    }
+
+    private System.Collections.IEnumerator WaitAndJoinSpecific(string code)
+    {
+        while (Photon.Pun.PhotonNetwork.NetworkClientState != Photon.Realtime.ClientState.ConnectedToMasterServer && Photon.Pun.PhotonNetwork.NetworkClientState != Photon.Realtime.ClientState.JoinedLobby)
+            yield return null;
+
+        if (joinCodeBtn != null) joinCodeBtn.text = "Join Friends";
+        AudioManager.SoundPlay(3);
+        if (NetworkManager.Instance != null) NetworkManager.Instance.JoinRoom(code);
     }
 
     private void SubscribeToEvents()
