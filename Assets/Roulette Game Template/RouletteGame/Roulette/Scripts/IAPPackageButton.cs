@@ -37,7 +37,7 @@ public class IAPPackageButton : MonoBehaviour
 
         // Set price
         if (priceText != null)
-            priceText.text = $"${pkg.price:F2}";
+            priceText.text = pkg.GetPriceString();
 
         // Set icon (optional)
         if (iconImage != null && pkg.icon != null)

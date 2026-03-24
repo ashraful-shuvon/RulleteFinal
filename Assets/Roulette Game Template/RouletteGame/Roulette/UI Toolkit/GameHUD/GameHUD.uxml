@@ -26,6 +26,7 @@
         
         <!-- Settings Toggle Buttons (Top Left) -->
         <ui:VisualElement name="SettingsPanel" class="settings-panel">
+            <ui:Button text="🛒" name="ShopButton" class="setting-btn shop-btn"/>
             <ui:Button text="♫" name="MusicToggleBtn" class="setting-btn"/>
             <ui:Button text="🔊" name="SoundToggleBtn" class="setting-btn"/>
         </ui:VisualElement>
@@ -93,6 +94,22 @@
                 <ui:Label text="ABC123" name="InviteRoomCode" class="invite-room-code"/>
                 <ui:Button text="Copy Code" name="CopyInviteCodeBtn" class="copy-invite-btn"/>
                 <ui:Button text="Close" name="CloseInviteBtn" class="close-invite-btn"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Store Panel (Hidden by default) -->
+        <ui:VisualElement name="StorePanel" class="store-panel" style="display: none;">
+            <ui:VisualElement name="StoreCard" class="store-card">
+                <ui:VisualElement class="store-header">
+                    <ui:Label text="CHIP STORE" class="store-title"/>
+                    <ui:Button text="✕" name="CloseStoreBtn" class="close-store-btn"/>
+                </ui:VisualElement>
+                
+                <ui:ScrollView name="StoreScrollView" class="store-scroll-view" show-vertical-scroller="true">
+                    <!-- Products will be generated dynamically here -->
+                </ui:ScrollView>
+                
+                <ui:Button text="Restore Purchases" name="RestorePurchasesBtn" class="restore-purchases-btn"/>
             </ui:VisualElement>
         </ui:VisualElement>
         

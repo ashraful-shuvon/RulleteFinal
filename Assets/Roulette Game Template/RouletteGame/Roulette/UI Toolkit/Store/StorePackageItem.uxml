@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement class="store-item">
+        <ui:VisualElement name="ItemIcon" class="store-item-icon"/>
+        <ui:VisualElement class="store-item-info">
+            <ui:Label text="1,000 CHIPS" name="ItemName" class="store-item-name"/>
+        </ui:VisualElement>
+        <ui:Button text="$4.99" name="BuyButton" class="store-buy-btn"/>
+    </ui:VisualElement>
+</ui:UXML>

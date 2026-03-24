@@ -545,3 +545,118 @@
     background-color: rgba(212, 175, 55, 0.3);
     scale: 1.1;
 }
+
+/* ============================================
+   STORE PANEL
+   ============================================ */
+.store-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.90);
+    justify-content: center;
+    align-items: center;
+}
+
+.store-card {
+    width: 90%;
+    max-width: 600px;
+    height: 70%;
+    padding: 30px;
+    background-color: rgba(30, 30, 40, 0.95);
+    border-radius: 20px;
+    border-width: 4px;
+    border-color: rgb(212, 175, 55);
+    flex-direction: column;
+}
+
+.store-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.store-title {
+    color: rgb(212, 175, 55);
+    font-size: 36px;
+    -unity-font-style: bold;
+}
+
+.close-store-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    background-color: transparent;
+    border-width: 0;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.close-store-btn:hover {
+    color: white;
+}
+
+.store-scroll-view {
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.restore-purchases-btn {
+    height: 50px;
+    background-color: transparent;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 20px;
+}
+
+.restore-purchases-btn:hover {
+    color: white;
+    border-color: white;
+}
+
+/* STORE ITEMS */
+.store-item {
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(50, 50, 60, 0.8);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.store-item-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    background-color: rgba(212, 175, 55, 0.2);
+    margin-right: 20px;
+}
+
+.store-item-info {
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.store-item-name {
+    color: white;
+    font-size: 32px;
+    -unity-font-style: bold;
+}
+
+.store-buy-btn {
+    width: 130px;
+    height: 70px;
+    background-color: rgb(212, 175, 55);
+    border-radius: 12px;
+    color: rgb(30, 30, 40);
+    font-size: 28px;
+    -unity-font-style: bold;
+}
+
+.store-buy-btn:hover {
+    background-color: rgb(232, 195, 75);
+}

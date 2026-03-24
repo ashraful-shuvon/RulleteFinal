@@ -45,9 +45,14 @@ public class GameHUDController : MonoBehaviourPunCallbacks
 
     // Invite panel
     private VisualElement invitePanel;
+    private VisualElement storePanel;
     private Label inviteRoomCode;
     private Button copyInviteCodeBtn;
     private Button closeInviteBtn;
+    private ScrollView storeScrollView;
+    private Button shopButton;
+    private Button closeStoreBtn;
+    private Button restorePurchasesBtn;
 
     // Chips & Settings
     private List<Button> chipButtons = new List<Button>();
@@ -142,6 +147,13 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         copyInviteCodeBtn = root.Q<Button>("CopyInviteCodeBtn");
         closeInviteBtn = root.Q<Button>("CloseInviteBtn");
 
+        // Store panel
+        storePanel = root.Q<VisualElement>("StorePanel");
+        storeScrollView = root.Q<ScrollView>("StoreScrollView");
+        shopButton = root.Q<Button>("ShopButton");
+        closeStoreBtn = root.Q<Button>("CloseStoreBtn");
+        restorePurchasesBtn = root.Q<Button>("RestorePurchasesBtn");
+
         // Setup players list
         if (playersList != null && playerHUDEntryAsset != null)
         {
@@ -153,6 +165,7 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         // Hide popups initially
         HideResultPopup();
         HideInvitePanel();
+        if (storePanel != null) storePanel.style.display = DisplayStyle.None;
 
         // Initial update
         UpdateBalance(3000, 0);
@@ -167,6 +180,7 @@ public class GameHUDController : MonoBehaviourPunCallbacks
 
     private void SetupButtonCallbacks()
     {
+        shopButton?.RegisterCallback<ClickEvent>(evt => ToggleStorePanel());
         clearButton?.RegisterCallback<ClickEvent>(evt => OnClearClicked());
         undoButton?.RegisterCallback<ClickEvent>(evt => OnUndoClicked());
         rebetButton?.RegisterCallback<ClickEvent>(evt => OnRebetClicked());
@@ -175,6 +189,14 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         inviteButton?.RegisterCallback<ClickEvent>(evt => ShowInvitePanel());
         copyInviteCodeBtn?.RegisterCallback<ClickEvent>(evt => CopyInviteCode());
         closeInviteBtn?.RegisterCallback<ClickEvent>(evt => HideInvitePanel());
+
+        closeStoreBtn?.RegisterCallback<ClickEvent>(evt => {
+            if (storePanel != null) storePanel.style.display = DisplayStyle.None;
+        });
+
+        restorePurchasesBtn?.RegisterCallback<ClickEvent>(evt => {
+            if (IAPManager.Instance != null) IAPManager.Instance.RestorePurchases();
+        });
     }
 
     private void SubscribeToEvents()
@@ -413,6 +435,81 @@ public class GameHUDController : MonoBehaviourPunCallbacks
     {
         if (invitePanel == null) return;
         invitePanel.style.display = DisplayStyle.None;
+    }
+
+    #endregion
+
+    #region Store Popup
+
+    private void ToggleStorePanel()
+    {
+        if (storePanel == null) return;
+        
+        bool isHidden = storePanel.style.display == DisplayStyle.None;
+        storePanel.style.display = isHidden ? DisplayStyle.Flex : DisplayStyle.None;
+
+        if (isHidden)
+        {
+            PopulateStore();
+            AudioManager.SoundPlay(3);
+        }
+    }
+
+    private void PopulateStore()
+    {
+        if (storeScrollView == null || IAPManager.Instance == null) return;
+
+        storeScrollView.Clear();
+
+        foreach (var package in IAPManager.Instance.packages)
+        {
+            VisualElement itemLayout = new VisualElement();
+            itemLayout.AddToClassList("store-item");
+
+            VisualElement itemIcon = new VisualElement();
+            itemIcon.AddToClassList("store-item-icon");
+            if (package.icon != null)
+            {
+                var img = new Image { sprite = package.icon };
+                img.style.width = new Length(100, LengthUnit.Percent);
+                img.style.height = new Length(100, LengthUnit.Percent);
+                itemIcon.Add(img);
+            }
+
+            VisualElement itemInfo = new VisualElement();
+            itemInfo.AddToClassList("store-item-info");
+            
+            Label itemName = new Label(package.packageName);
+            itemName.AddToClassList("store-item-name");
+            
+            Label itemChips = new Label($"{package.chipAmount:N0} CHIPS");
+            itemChips.style.color = new Color(0.8f, 0.8f, 0.8f);
+            itemChips.style.fontSize = 20;
+
+            itemInfo.Add(itemName);
+            itemInfo.Add(itemChips);
+
+            Button buyBtn = new Button();
+            buyBtn.text = package.GetPriceString();
+            buyBtn.AddToClassList("store-buy-btn");
+            
+            var capturePackage = package;
+            buyBtn.clicked += () => IAPManager.Instance.PurchasePackage(capturePackage);
+
+            itemLayout.Add(itemIcon);
+            itemLayout.Add(itemInfo);
+            itemLayout.Add(buyBtn);
+            
+            storeScrollView.Add(itemLayout);
+        }
+
+        if (restorePurchasesBtn != null)
+        {
+            if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.OSXPlayer)
+                restorePurchasesBtn.style.display = DisplayStyle.Flex;
+            else
+                restorePurchasesBtn.style.display = DisplayStyle.None;
+        }
     }
 
     #endregion
