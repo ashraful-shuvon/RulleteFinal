@@ -102,10 +102,10 @@
 
 .right-panel {
     position: absolute;
-    right: 35px;
-    top: 135px;
-    width: 250px;
-    padding: 15px;
+    right: 15px; /* Safely anchored flush to the right bezel curve */
+    top: 220px; /* Lowered significantly to clear the top connection info entirely */
+    width: 210px; /* Eased up the width slightly to give inner text breathing room */
+    padding: 10px;
     background-color: rgba(15, 15, 20, 0.85);
     border-radius: 16px;
     border-width: 1px;
@@ -125,12 +125,12 @@
 }
 
 .invite-hud-btn {
-    height: 50px;
+    height: 40px;
     margin-top: 10px;
     background-color: rgba(212, 175, 55, 0.6);
     border-radius: 12px;
     color: rgb(255, 255, 255);
-    font-size: 24px;
+    font-size: 18px;
     -unity-font-style: bold;
 }
 
@@ -272,28 +272,28 @@
 .player-hud-entry {
     flex-direction: row;
     align-items: center;
-    padding: 8px 10px;
+    padding: 4px 6px;
     margin-bottom: 2px;
     background-color: transparent;
     border-bottom-width: 1px;
     border-bottom-color: rgba(255, 255, 255, 0.05);
     border-radius: 0;
-    min-height: 55px;
+    min-height: 45px;
 }
 
 .avatar-box {
-    width: 36px;
-    height: 36px;
-    border-radius: 18px;
+    width: 28px;
+    height: 28px;
+    border-radius: 14px;
     background-color: rgba(212, 175, 55, 0.3);
-    margin-right: 10px;
+    margin-right: 6px;
     position: relative;
 }
 
 .player-avatar {
     width: 100%;
     height: 100%;
-    border-radius: 18px;
+    border-radius: 14px;
 }
 
 .info-box {
@@ -324,7 +324,7 @@
 
 .hud-name {
     color: rgb(255, 255, 255);
-    font-size: 16px;
+    font-size: 14px;
     -unity-font-style: bold;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -334,24 +334,24 @@
 
 .hud-balance {
     color: rgb(212, 175, 55);
-    font-size: 13px;
+    font-size: 11px;
     margin: 0;
     padding: 0;
     margin-top: 2px;
 }
 
 .bet-indicator {
-    padding: 4px 8px;
+    padding: 2px 6px;
     background-color: rgba(80, 180, 80, 0.4);
-    border-radius: 6px;
-    margin-right: 6px;
+    border-radius: 4px;
+    margin-right: 2px;
     justify-content: center;
     align-items: center;
 }
 
 .hud-bet {
     color: rgb(150, 255, 150);
-    font-size: 14px;
+    font-size: 12px;
     -unity-font-style: bold;
     margin: 0;
     padding: 0;
