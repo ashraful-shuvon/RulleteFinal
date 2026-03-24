@@ -287,7 +287,7 @@ public class IAPPackage
         if (IAPManager.Instance != null && IAPManager.Instance.IsInitialized())
         {
             string locPrice = IAPManager.Instance.GetLocalizedPriceString(productID);
-            if (!string.IsNullOrEmpty(locPrice)) return locPrice;
+            if (!string.IsNullOrEmpty(locPrice) && !locPrice.Contains("0.01")) return locPrice;
         }
         return $"${price:F2}";
     }

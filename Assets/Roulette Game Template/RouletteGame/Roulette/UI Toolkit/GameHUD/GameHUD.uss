@@ -593,7 +593,7 @@
 .store-card {
     width: 90%;
     max-width: 600px;
-    height: 70%;
+    max-height: 80%;
     padding: 30px;
     background-color: rgba(30, 30, 40, 0.95);
     border-radius: 20px;
