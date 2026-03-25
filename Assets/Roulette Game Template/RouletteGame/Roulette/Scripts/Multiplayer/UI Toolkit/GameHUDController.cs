@@ -19,10 +19,13 @@ public class GameHUDController : MonoBehaviourPunCallbacks
     private Label timerLabel;
     private Label connectionDot;
     private Label playersLabel;
+    private Button playersToggleBtn;
 
-    // Right panel
+    // Right panel (now inside PlayersModalPanel)
     private ListView playersList;
     private Button inviteButton;
+    private VisualElement playersModalPanel;
+    private Button closePlayersModalBtn;
 
     // Bottom bar
     private Label balanceText;
@@ -104,10 +107,13 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         timerLabel = root.Q<Label>("TimerLabel");
         connectionDot = root.Q<Label>("ConnectionDot");
         playersLabel = root.Q<Label>("PlayersLabel");
+        playersToggleBtn = root.Q<Button>("PlayersToggleBtn");
 
-        // Right panel
+        // Right panel (Modal)
         playersList = root.Q<ListView>("PlayersList");
         inviteButton = root.Q<Button>("InviteButton");
+        playersModalPanel = root.Q<VisualElement>("PlayersModalPanel");
+        closePlayersModalBtn = root.Q<Button>("ClosePlayersModalBtn");
 
         // Bottom bar
         balanceText = root.Q<Label>("BalanceText");
@@ -172,6 +178,7 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         HideResultPopup();
         HideInvitePanel();
         if (storePanel != null) storePanel.style.display = DisplayStyle.None;
+        if (playersModalPanel != null) playersModalPanel.style.display = DisplayStyle.None;
 
         // Main Menu
         mainMenuPanel = root.Q<VisualElement>("MainMenuPanel");
@@ -211,6 +218,11 @@ public class GameHUDController : MonoBehaviourPunCallbacks
     private void SetupButtonCallbacks()
     {
         shopButton?.RegisterCallback<ClickEvent>(evt => ToggleStorePanel());
+        playersToggleBtn?.RegisterCallback<ClickEvent>(evt => TogglePlayersModal());
+        closePlayersModalBtn?.RegisterCallback<ClickEvent>(evt => {
+            if (playersModalPanel != null) playersModalPanel.style.display = DisplayStyle.None;
+        });
+
         clearButton?.RegisterCallback<ClickEvent>(evt => OnClearClicked());
         undoButton?.RegisterCallback<ClickEvent>(evt => OnUndoClicked());
         rebetButton?.RegisterCallback<ClickEvent>(evt => OnRebetClicked());
@@ -264,6 +276,13 @@ public class GameHUDController : MonoBehaviourPunCallbacks
                 NetworkManager.Instance.JoinRoom(code);
             }
         });
+    }
+
+    private void TogglePlayersModal()
+    {
+        if (playersModalPanel == null) return;
+        bool isVisible = playersModalPanel.style.display == DisplayStyle.Flex;
+        playersModalPanel.style.display = isVisible ? DisplayStyle.None : DisplayStyle.Flex;
     }
 
     private System.Collections.IEnumerator WaitAndJoinRandom()
@@ -435,7 +454,7 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         }
 
         playersList?.RefreshItems();
-        if (playersLabel != null) playersLabel.text = $"{PhotonNetwork.CurrentRoom?.PlayerCount ?? 0}/{PhotonNetwork.CurrentRoom?.MaxPlayers ?? 0} Players";
+        if (playersLabel != null) playersLabel.text = $"PLAYERS ( {PhotonNetwork.CurrentRoom?.PlayerCount ?? 0} / {PhotonNetwork.CurrentRoom?.MaxPlayers ?? 0} )";
     }
 
     #endregion

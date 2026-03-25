@@ -278,22 +278,22 @@
     border-bottom-width: 1px;
     border-bottom-color: rgba(255, 255, 255, 0.05);
     border-radius: 0;
-    min-height: 45px;
+    min-height: 80px;
 }
 
 .avatar-box {
-    width: 28px;
-    height: 28px;
-    border-radius: 14px;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
     background-color: rgba(212, 175, 55, 0.3);
-    margin-right: 6px;
+    margin-right: 15px;
     position: relative;
 }
 
 .player-avatar {
     width: 100%;
     height: 100%;
-    border-radius: 14px;
+    border-radius: 25px;
 }
 
 .info-box {
@@ -324,7 +324,7 @@
 
 .hud-name {
     color: rgb(255, 255, 255);
-    font-size: 14px;
+    font-size: 26px;
     -unity-font-style: bold;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -334,24 +334,24 @@
 
 .hud-balance {
     color: rgb(212, 175, 55);
-    font-size: 11px;
+    font-size: 18px;
     margin: 0;
     padding: 0;
     margin-top: 2px;
 }
 
 .bet-indicator {
-    padding: 2px 6px;
+    padding: 4px 10px;
     background-color: rgba(80, 180, 80, 0.4);
-    border-radius: 4px;
-    margin-right: 2px;
+    border-radius: 8px;
+    margin-right: 8px;
     justify-content: center;
     align-items: center;
 }
 
 .hud-bet {
     color: rgb(150, 255, 150);
-    font-size: 12px;
+    font-size: 22px;
     -unity-font-style: bold;
     margin: 0;
     padding: 0;
@@ -366,9 +366,9 @@
 }
 
 .ready-dot {
-    width: 14px;
-    height: 14px;
-    border-radius: 7px;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
     background-color: rgb(100, 255, 100);
 }
 

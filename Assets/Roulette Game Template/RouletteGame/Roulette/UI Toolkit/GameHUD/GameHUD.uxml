@@ -27,19 +27,14 @@
             </ui:VisualElement>
             
             <!-- Connection Info -->
-            <ui:VisualElement name="ConnectionInfo" class="connection-info">
+            <ui:VisualElement name="ConnectionInfo" class="connection-info" style="align-items: center;">
                 <ui:Label text="●" name="ConnectionDot" class="connection-dot"/>
-                <ui:Label text="2/4 Players" name="PlayersLabel" class="players-label"/>
+                <ui:Button text="👥" name="PlayersToggleBtn" class="setting-btn" style="margin-left: 10px;"/>
             </ui:VisualElement>
             
         </ui:VisualElement>
         
-        <!-- Right Panel: Players List -->
-        <ui:VisualElement name="RightPanel" class="right-panel">
-            <ui:Label text="PLAYERS" class="panel-title"/>
-            <ui:ListView name="PlayersList" class="players-hud-list" fixed-item-height="55"/>
-            <ui:Button text="Invite" name="InviteButton" class="invite-hud-btn"/>
-        </ui:VisualElement>
+
         
         <!-- Bottom Bar: Balance & Betting Actions -->
         <ui:VisualElement name="BottomBar" class="bottom-bar">
@@ -127,5 +122,21 @@
             </ui:VisualElement>
         </ui:VisualElement>
         
+        <!-- Players Modal Panel (Hidden by default) -->
+        <ui:VisualElement name="PlayersModalPanel" class="store-panel" style="display: none;">
+            <ui:VisualElement name="PlayersModalCard" class="store-card" style="width: 95%; max-width: 700px; min-height: 35%; max-height: 75%;">
+                <ui:VisualElement class="store-header">
+                    <ui:Label text="PLAYERS" name="PlayersLabel" class="store-title"/>
+                    <ui:Button text="✕" name="ClosePlayersModalBtn" class="close-store-btn"/>
+                </ui:VisualElement>
+                
+                <ui:VisualElement style="flex-grow: 1; min-height: 200px; margin-top: 10px; margin-bottom: 20px;">
+                    <ui:ListView name="PlayersList" class="players-hud-list" fixed-item-height="95" style="flex-grow: 1; border-radius: 10px;"/>
+                </ui:VisualElement>
+                
+                <ui:Button text="Invite Player" name="InviteButton" class="restore-purchases-btn"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
     </ui:VisualElement>
 </ui:UXML>
