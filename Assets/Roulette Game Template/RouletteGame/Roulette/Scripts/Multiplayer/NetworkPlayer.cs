@@ -190,7 +190,7 @@ public class NetworkPlayer : MonoBehaviourPun
             BetSpace space = BetSpaceRegistry.GetBetSpaceByIndex(bet.BetSpaceIndex);
             if (space != null && space.stack != null)
             {
-                space.stack.Clear();
+                space.stack.Remove(bet.Amount);
             }
         }
 

@@ -53,6 +53,8 @@ public class BetSpace : MonoBehaviour {
 
     private void OnMouseEnter()
     {
+        if (GameHUDController.IsAnyModalOpen) return;
+
         ToolTipManager.SelectTarget(stack);
 
         if (mesh)
@@ -92,6 +94,8 @@ public class BetSpace : MonoBehaviour {
 
     private void OnMouseUp()
     {
+        if (GameHUDController.IsAnyModalOpen) return;
+
         float selectedValue = ChipManager.GetSelectedValue();
         ApplyBet(selectedValue);
         ToolTipManager.SelectTarget(stack);

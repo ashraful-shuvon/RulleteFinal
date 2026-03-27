@@ -71,6 +71,8 @@ public class GameHUDController : MonoBehaviourPunCallbacks
     // State
     private List<PlayerHUDInfo> playersHUD = new List<PlayerHUDInfo>();
 
+    public static bool IsAnyModalOpen { get; private set; }
+
     private void Awake()
     {
         if (uiDocument == null)
@@ -82,6 +84,16 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         SetupUI();
         SetupButtonCallbacks();
         SubscribeToEvents();
+
+        InvokeRepeating("RefreshPlayerStats", 1f, 1f);
+    }
+
+    private void RefreshPlayerStats()
+    {
+        if (playersModalPanel != null && playersModalPanel.style.display == DisplayStyle.Flex)
+        {
+            UpdatePlayersList();
+        }
     }
 
     private void Update()
@@ -283,6 +295,14 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         if (playersModalPanel == null) return;
         bool isVisible = playersModalPanel.style.display == DisplayStyle.Flex;
         playersModalPanel.style.display = isVisible ? DisplayStyle.None : DisplayStyle.Flex;
+        
+        if (!isVisible) 
+        {
+            playersModalPanel.AddToClassList("animate-scale-in");
+            UpdatePlayersList();
+        }
+
+        UpdateModalState();
     }
 
     private System.Collections.IEnumerator WaitAndJoinRandom()
@@ -441,14 +461,18 @@ public class GameHUDController : MonoBehaviourPunCallbacks
         {
             foreach (var player in PhotonNetwork.PlayerList)
             {
+                NetworkPlayer netPlayer = NetworkPlayer.GetPlayerByActorNumber(player.ActorNumber);
+                float balance = netPlayer != null ? netPlayer.Balance : 0f;
+                float currentBet = netPlayer != null ? netPlayer.CurrentBet : 0f;
+
                 playersHUD.Add(new PlayerHUDInfo
                 {
                     Name = player.NickName,
                     IsMaster = player.IsMasterClient,
                     IsLocal = player.IsLocal,
-                    Balance = 3000, // Would come from NetworkPlayer
-                    Bet = 0,
-                    IsReady = true
+                    Balance = balance,
+                    Bet = currentBet,
+                    IsReady = netPlayer != null ? netPlayer.IsReady : true
                 });
             }
         }
@@ -551,14 +575,24 @@ public class GameHUDController : MonoBehaviourPunCallbacks
     {
         if (storePanel == null) return;
         
-        bool isHidden = storePanel.style.display == DisplayStyle.None;
-        storePanel.style.display = isHidden ? DisplayStyle.Flex : DisplayStyle.None;
-
-        if (isHidden)
+        bool isVisible = storePanel.style.display == DisplayStyle.Flex;
+        storePanel.style.display = isVisible ? DisplayStyle.None : DisplayStyle.Flex;
+        
+        if (!isVisible) 
         {
+            storePanel.AddToClassList("animate-scale-in");
             PopulateStore();
             AudioManager.SoundPlay(3);
         }
+
+        UpdateModalState();
+    }
+
+    private void UpdateModalState()
+    {
+        bool playersOpen = playersModalPanel != null && playersModalPanel.style.display == DisplayStyle.Flex;
+        bool storeOpen = storePanel != null && storePanel.style.display == DisplayStyle.Flex;
+        IsAnyModalOpen = playersOpen || storeOpen;
     }
 
     private void PopulateStore()

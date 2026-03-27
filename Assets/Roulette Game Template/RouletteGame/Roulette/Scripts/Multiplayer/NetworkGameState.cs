@@ -289,7 +289,11 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
         playerBets[playerId].AddBet(betSpaceIndex, amount);
 
         // Notify UI to show other player's bets
-        // This would be connected to the visual chip system
+        BetSpace space = BetSpaceRegistry.GetBetSpaceByIndex(betSpaceIndex);
+        if (space != null && space.stack != null)
+        {
+            space.stack.Add(amount);
+        }
     }
 
     /// <summary>
@@ -432,6 +436,16 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
         int playerId = (int)photonEvent.CustomData;
         if (playerBets.ContainsKey(playerId))
         {
+            // Remove their specific bets visually from the shared table stacks
+            foreach (var bet in playerBets[playerId].Bets)
+            {
+                BetSpace space = BetSpaceRegistry.GetBetSpaceByIndex(bet.Key);
+                if (space != null && space.stack != null)
+                {
+                    space.stack.Remove(bet.Value);
+                }
+            }
+
             playerBets.Remove(playerId);
             Debug.Log($"[NetworkGameState] Cleared bets for player {playerId}");
         }
@@ -447,6 +461,12 @@ public class NetworkGameState : MonoBehaviourPunCallbacks, IOnEventCallback
         if (playerBets.ContainsKey(playerId))
         {
              playerBets[playerId].RemoveBet(betSpaceIndex, amount);
+
+             BetSpace space = BetSpaceRegistry.GetBetSpaceByIndex(betSpaceIndex);
+             if (space != null && space.stack != null)
+             {
+                 space.stack.Remove(amount);
+             }
         }
     }
 

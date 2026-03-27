@@ -78,7 +78,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         if (string.IsNullOrEmpty(PhotonNetwork.NickName))
         {
-            SetPlayerNickname($"Guest_{Random.Range(100, 999)}");
+            string savedEmail = PlayerPrefs.GetString("SavedEmail", "");
+            if (!string.IsNullOrEmpty(savedEmail) && savedEmail.Contains("@"))
+            {
+                SetPlayerNickname(savedEmail.Split('@')[0]);
+            }
+            else
+            {
+                SetPlayerNickname($"Guest_{Random.Range(100, 999)}");
+            }
         }
 
         Debug.Log("[NetworkManager] Connecting to Photon...");
