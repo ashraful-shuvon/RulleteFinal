@@ -4,7 +4,7 @@ using TMPro;
 
 public class LimitBetPlate : MonoBehaviour
 {
-    public static float max = 1000f;
+    public static float max = 1000000f;
     public static float min = 1f;
     public SpriteRenderer plate;
 
@@ -21,8 +21,8 @@ public class LimitBetPlate : MonoBehaviour
 
     public static void UpdateText()
     {
-        Instance.minT.text = string.Format("<color=red>{0}</color> {1}", "Min", min.ToString("0.0"));
-        Instance.maxT.text = string.Format("<color=red>{0}</color> {1}", "Max", max.ToString("0.0"));
+        Instance.minT.text = string.Format("<color=red>{0}</color> {1}", "Min", min.ToString("N0"));
+        Instance.maxT.text = string.Format("<color=red>{0}</color> {1}", "Max", max.ToString("N0"));
     }
 
     public static void SetBetLimits(float minBet, float maxBet)
