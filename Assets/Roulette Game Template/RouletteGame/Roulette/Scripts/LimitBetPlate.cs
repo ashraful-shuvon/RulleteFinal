@@ -4,7 +4,7 @@ using TMPro;
 
 public class LimitBetPlate : MonoBehaviour
 {
-    public static float max = 1000000f;
+    public static float max = 2000000f;
     public static float min = 1f;
     public SpriteRenderer plate;
 

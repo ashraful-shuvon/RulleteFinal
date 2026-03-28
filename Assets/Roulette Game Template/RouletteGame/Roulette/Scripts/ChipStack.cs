@@ -3,16 +3,22 @@ using DG.Tweening;
 using System.Collections.Generic;
 using System;
 
-public class ChipStack : MonoBehaviour {
+public class ChipStack : MonoBehaviour
+{
 
-    public static readonly int[] CHIP_VALUES = new int[] { 1, 5, 10, 25, 50, 100 };
-    public static readonly Vector3 CollectPosition = new Vector3(0,0,-3);
+    // Extended chip denominations — index must match ChipManager.Chips[] array order
+    public static readonly int[] CHIP_VALUES = new int[] { 1, 5, 10, 25, 50, 100, 1000, 5000, 10000, 25000, 50000, 100000, 500000, 1000000 };
+
+    // Maximum physical chips rendered in the scene to avoid performance issues
+    private const int MAX_VISIBLE_CHIPS = 20;
+
+    public static readonly Vector3 CollectPosition = new Vector3(0, 0, -3);
 
     private Vector3 initialPosition;
     private float value = 0;
 
     private List<GameObject> chips;
-   
+
     void Start()
     {
         initialPosition = transform.position;
@@ -66,52 +72,76 @@ public class ChipStack : MonoBehaviour {
         }
 
         this.value = value;
-         chips = new List<GameObject>();
+        chips = new List<GameObject>();
 
+        // --- Greedy decomposition: find the minimum set of chip denominations ---
+        float remaining = value;
         int currentChipIndex = CHIP_VALUES.Length - 1;
 
-        while (value > 0)
-        {
-            float nextValue = value - CHIP_VALUES[currentChipIndex];
+        // Build a list of (chipIndex, count) pairs
+        List<(int index, int count)> chipGroups = new List<(int, int)>();
 
-            if (nextValue < 0)
+        while (remaining > 0.001f)
+        {
+            if (currentChipIndex < 0)
+                throw new Exception("Impossible chip value: " + value);
+
+            int chipVal = CHIP_VALUES[currentChipIndex];
+            int count = (int)(remaining / chipVal);
+
+            if (count > 0)
             {
-                currentChipIndex--;
-                if (currentChipIndex < 0)
-                {
-                    throw new Exception("Impossible value");
-                }
-                continue;
+                chipGroups.Add((currentChipIndex, count));
+                remaining -= chipVal * count;
+                remaining = Mathf.Round(remaining * 100f) / 100f; // fix float drift
             }
 
-            value = nextValue;
-
-            GameObject newChip = ChipManager.InstantiateChip(currentChipIndex);
-            newChip.transform.parent = gameObject.transform;
-            newChip.transform.localPosition = new Vector3(0, .01f * (chips.Count + 1), 0);
-
-            chips.Add(newChip);
+            currentChipIndex--;
         }
-    }
-    /*
-    public float Win(int multiplier)
-    {
-        float winAmount = value * multiplier;
-        SetValue(winAmount);
 
-        if (winAmount > 0)
+        // --- Render chips, capped at MAX_VISIBLE_CHIPS to avoid spawning thousands ---
+        int totalLogicalChips = 0;
+        foreach (var g in chipGroups) totalLogicalChips += g.count;
+
+        int slotIndex = 0;
+
+        if (totalLogicalChips <= MAX_VISIBLE_CHIPS)
         {
-            CollectChips();
+            // Render every chip normally
+            foreach (var (index, count) in chipGroups)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    SpawnChip(index, slotIndex++);
+                }
+            }
         }
-
-        return winAmount;
+        else
+        {
+            // Show one representative chip per denomination group only
+            foreach (var (index, count) in chipGroups)
+            {
+                if (count > 0)
+                    SpawnChip(index, slotIndex++);
+            }
+        }
     }
-    */
+
+    private void SpawnChip(int chipIndex, int stackSlot)
+    {
+        // Clamp index so missing high-value prefabs fall back to the highest available
+        int safeIndex = Mathf.Clamp(chipIndex, 0, ChipManager.ChipPrefabCount - 1);
+
+        GameObject newChip = ChipManager.InstantiateChip(safeIndex);
+        newChip.transform.parent = gameObject.transform;
+        newChip.transform.localPosition = new Vector3(0, .01f * (stackSlot + 1), 0);
+        chips.Add(newChip);
+    }
 
     public float Win(int multiplier)
     {
-        float profit = value * multiplier;  // Bet × multiplier = profit
-        SetValue(profit);  // Show the winnings
+        float profit = value * multiplier;
+        SetValue(profit);
 
         if (profit > 0)
         {

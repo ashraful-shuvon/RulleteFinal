@@ -14,5 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Roulette Game Template/RouletteGame/Roulette/Scenes/EuropeanRoulette_mobile.unity
     guid: b24f0918bb57e5d41bafabfcce6ee895
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000,
+      guid: c2b40979cc174cf49bda9259e731d1a1, type: 2}
   m_UseUCBPForAssetBundles: 0
